@@ -1,11 +1,20 @@
 package com.ormedia.qrscanner;
 
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.content.Intent;
 import android.graphics.Point;
@@ -23,6 +32,10 @@ import com.ormedia.qrscanner.barcode.BarcodeCaptureActivity;
 import com.ormedia.qrscanner.Network.*;
 
 import org.json.JSONObject;
+
+import java.util.zip.Inflater;
+
+import static android.app.PendingIntent.getActivity;
 
 
 /**
@@ -118,6 +131,48 @@ public class FullscreenActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_menu, menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.editButton_btn:
+                LayoutInflater layoutInflaterAndroid = LayoutInflater.from(this);
+                View mView = layoutInflaterAndroid.inflate(R.layout.editbutton_dialog, null);
+                AlertDialog.Builder alertDialogBuilderUserInput = new AlertDialog.Builder(this);
+                alertDialogBuilderUserInput.setView(mView);
+
+                final EditText userInputDialogButtonNumber = (EditText) mView.findViewById(R.id.btnNumber_id);
+                final EditText userInputDialogButtontext = (EditText) mView.findViewById(R.id.btnText_id);
+                alertDialogBuilderUserInput
+                        .setCancelable(false)
+                        .setPositiveButton("Send", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialogBox, int id) {
+                                // ToDo get user input here
+                            }
+                        })
+
+                        .setNegativeButton("Cancel",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialogBox, int id) {
+                                        dialogBox.cancel();
+                                    }
+                                });
+
+                AlertDialog alertDialogAndroid = alertDialogBuilderUserInput.create();
+                alertDialogAndroid.show();
+                return true;
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+
+        }
+    }
     public void update(String code, String productName, String supplier) {
         new JSONResponse(this, "http://35.198.198.0/scan?action=save&code="+code+"&productName="+productName+"&supplierName="+supplier, new JSONResponse.onComplete() {
             @Override
