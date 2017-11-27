@@ -8,11 +8,14 @@ import android.content.Intent;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.PopupMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -68,7 +71,12 @@ public class FullscreenActivity extends AppCompatActivity {
         trimaTextview = (TextView) findViewById(R.id.trim_after_textview);
         productTextView.requestFocus();
         Button scanBarcodeButton = (Button) findViewById(R.id.scan_barcode_button);
-        Button siemensButton = (Button) findViewById(R.id.siemens_button);
+        Button supplierButton1 = (Button) findViewById(R.id.supplier_btn1);
+        Button supplierButton2 = (Button) findViewById(R.id.supplier_btn2);
+        Button supplierButton3 = (Button) findViewById(R.id.supplier_btn3);
+        Button supplierButton4 = (Button) findViewById(R.id.supplier_btn4);
+        Button supplierButton5 = (Button) findViewById(R.id.supplier_btn5);
+        Button supplierButton6 = (Button) findViewById(R.id.supplier_btn6);
         Button submitBarcodeButton = (Button) findViewById(R.id.submit_button);
         Button trimButton = (Button) findViewById(R.id.trim_button);
         scanBarcodeButton.setOnClickListener(new View.OnClickListener() {
@@ -79,25 +87,57 @@ public class FullscreenActivity extends AppCompatActivity {
             }
         });
 
-
         submitBarcodeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 update(mResultTextView.getText().toString(), productTextView.getText().toString(), supplierTextView.getText().toString());
             }
-
         });
 
-        siemensButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                supplierTextView.setText("SIEMENS");
-            }
-        });
-        siemensButton.setOnLongClickListener(new View.OnLongClickListener() {
+        supplierButton1.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                showEditButtonDialog(v);
+                showSupplierButtonPopup(v);
+                return true;
+            }
+        });
+
+        supplierButton2.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                showSupplierButtonPopup(v);
+                return true;
+            }
+        });
+
+        supplierButton3.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                showSupplierButtonPopup(v);
+                return true;
+            }
+        });
+
+        supplierButton4.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                showSupplierButtonPopup(v);
+                return true;
+            }
+        });
+
+        supplierButton5.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                showSupplierButtonPopup(v);
+                return true;
+            }
+        });
+
+        supplierButton6.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                showSupplierButtonPopup(v);
                 return true;
             }
         });
@@ -137,13 +177,14 @@ public class FullscreenActivity extends AppCompatActivity {
             }
         });
     }
-
+    /*
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_menu, menu);
         return true;
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -155,6 +196,11 @@ public class FullscreenActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
 
         }
+    }
+    */
+    public void supplier_btn_onclick(View v){
+        final TextView textView = (TextView)v;
+        supplierTextView.setText(textView.getText().toString());
     }
     public void update(String code, String productName, String supplier) {
         new JSONResponse(this, "http://35.198.198.0/scan?action=save&code="+code+"&productName="+productName+"&supplierName="+supplier, new JSONResponse.onComplete() {
@@ -171,7 +217,6 @@ public class FullscreenActivity extends AppCompatActivity {
                 }
             }
         });
-
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -230,5 +275,30 @@ public class FullscreenActivity extends AppCompatActivity {
 
         AlertDialog alertDialogAndroid = alertDialogBuilderUserInput.create();
         alertDialogAndroid.show();
+    }
+
+    public void showSupplierButtonPopup(final View v){
+        Button button = (Button)v;
+        PopupMenu popup = new PopupMenu(FullscreenActivity.this, button);
+        //Inflating the Popup using xml file
+        popup.getMenuInflater().inflate(R.menu.supplier_btn_popupmenu, popup.getMenu());
+
+        //registering popup with OnMenuItemClickListener
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getTitle().toString()){
+                    case "Edit":    showEditButtonDialog(v);
+                                    break;
+                    case "Delete":  ((ViewGroup)v.getParent()).removeView(v);
+                                    break;
+                    default:
+                        Toast.makeText(FullscreenActivity.this, "MenuItemClick error", Toast.LENGTH_SHORT).show();
+                        break;
+                }
+                return true;
+            }
+        });
+
+        popup.show();//showing popup menu
     }
 }
