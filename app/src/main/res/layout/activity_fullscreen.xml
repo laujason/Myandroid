@@ -1,0 +1,126 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#66AADD"
+    tools:context="com.ormedia.qrscanner.FullscreenActivity"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:contextClickable="false"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/trim_before_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:focusedByDefault="false"
+                android:inputType="number" />
+
+            <Button
+                android:id="@+id/trim_button"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="TRIM" />
+
+            <EditText
+                android:id="@+id/trim_after_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:focusedByDefault="false"
+                android:inputType="number" />
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/result_textview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:ems="10"
+            android:gravity="center"
+            android:hint="Code"
+            android:inputType="textPersonName" />
+
+        <EditText
+            android:id="@+id/product_name_textview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:ems="10"
+            android:gravity="center"
+            android:hint="Product Name"
+            android:inputType="textPersonName" />
+
+        <EditText
+            android:id="@+id/supplier_textview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:gravity="center"
+            android:hint="Supplier"
+            android:inputType="textPersonName" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Choose a supplier:" />
+
+            <Button
+                android:id="@+id/siemens_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="SIEMENS" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+    <Button
+        android:id="@+id/scan_barcode_button"
+        android:layout_width="fill_parent"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="21dp"
+        android:layout_marginEnd="250dp"
+        android:layout_marginStart="20dp"
+        android:background="@color/colorAccent"
+        android:text="@string/scan_barcode_button"
+        android:textColor="@color/colorWhite"
+        android:textSize="20sp" />
+
+    <Button
+        android:id="@+id/submit_button"
+        android:layout_width="fill_parent"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="21dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginStart="250dp"
+        android:background="@color/colorAccent"
+        android:text="@string/submit_button"
+        android:textColor="@color/colorWhite"
+        android:textSize="20sp" />
+</RelativeLayout>
