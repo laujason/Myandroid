@@ -94,6 +94,13 @@ public class FullscreenActivity extends AppCompatActivity {
                 supplierTextView.setText("SIEMENS");
             }
         });
+        siemensButton.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                showEditButtonDialog(v);
+                return true;
+            }
+        });
 
         trimButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -141,30 +148,6 @@ public class FullscreenActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.editButton_btn:
-                LayoutInflater layoutInflaterAndroid = LayoutInflater.from(this);
-                View mView = layoutInflaterAndroid.inflate(R.layout.editbutton_dialog, null);
-                AlertDialog.Builder alertDialogBuilderUserInput = new AlertDialog.Builder(this);
-                alertDialogBuilderUserInput.setView(mView);
-
-                final EditText userInputDialogButtonNumber = (EditText) mView.findViewById(R.id.btnNumber_id);
-                final EditText userInputDialogButtontext = (EditText) mView.findViewById(R.id.btnText_id);
-                alertDialogBuilderUserInput
-                        .setCancelable(false)
-                        .setPositiveButton("Send", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialogBox, int id) {
-                                // ToDo get user input here
-                            }
-                        })
-
-                        .setNegativeButton("Cancel",
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialogBox, int id) {
-                                        dialogBox.cancel();
-                                    }
-                                });
-
-                AlertDialog alertDialogAndroid = alertDialogBuilderUserInput.create();
-                alertDialogAndroid.show();
                 return true;
             default:
                 // If we got here, the user's action was not recognized.
@@ -223,5 +206,29 @@ public class FullscreenActivity extends AppCompatActivity {
                     CommonStatusCodes.getStatusCodeString(resultCode)));
         } else super.onActivityResult(requestCode, resultCode, data);
     }
+    public void showEditButtonDialog(View v){
+        final TextView textView = (TextView)v;
+        LayoutInflater layoutInflaterAndroid = LayoutInflater.from(this);
+        View mView = layoutInflaterAndroid.inflate(R.layout.editbutton_dialog, null);
+        AlertDialog.Builder alertDialogBuilderUserInput = new AlertDialog.Builder(this);
+        alertDialogBuilderUserInput.setView(mView);
 
+        final EditText supplierName = (EditText) mView.findViewById(R.id.btnText_id);
+        alertDialogBuilderUserInput
+                .setCancelable(false)
+                .setPositiveButton("Update", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialogBox, int id) {
+                        textView.setText(supplierName.getText().toString());
+                    }
+                })
+                .setNegativeButton("Cancel",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialogBox, int id) {
+                                dialogBox.cancel();
+                            }
+                        });
+
+        AlertDialog alertDialogAndroid = alertDialogBuilderUserInput.create();
+        alertDialogAndroid.show();
+    }
 }
