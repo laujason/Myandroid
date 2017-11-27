@@ -79,17 +79,57 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/siemens_button"
+                android:id="@+id/supplier_btn1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:onClick="supplier_btn_onclick"
                 android:text="SIEMENS" />
 
             <Button
-                android:id="@+id/supplier_btn"
+                android:id="@+id/supplier_btn2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:onClick="supplier_btn_onclick"
+                android:text="SIEMENS" />
+
+            <Button
+                android:id="@+id/supplier_btn3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:onClick="supplier_btn_onclick"
+                android:text="SIEMENS" />
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/supplier_btn4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:onClick="supplier_btn_onclick"
+                android:text="SIEMENS" />
+
+            <Button
+                android:id="@+id/supplier_btn5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:onClick="supplier_btn_onclick"
+                android:text="SIEMENS" />
+
+            <Button
+                android:id="@+id/supplier_btn6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:onClick="supplier_btn_onclick"
                 android:text="SIEMENS" />
 
         </LinearLayout>
