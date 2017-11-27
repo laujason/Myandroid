@@ -3,9 +3,10 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/editButton_btn"
-        android:checkable="false"
+        android:id="@+id/longCode_cbox"
+        android:checkable="true"
+        android:checked="false"
         android:enabled="true"
-        android:title="Edit Button"
-        android:visible="true" />
+        android:title="Long Code Mode"
+        app:actionLayout="@layout/switch_item" />
 </menu>

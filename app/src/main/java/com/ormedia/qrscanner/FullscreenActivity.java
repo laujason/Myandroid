@@ -56,7 +56,7 @@ public class FullscreenActivity extends AppCompatActivity {
     private TextView trimbTextview;
     private TextView trimaTextview;
     private String code;
-
+    private boolean longCodeMode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -174,30 +174,38 @@ public class FullscreenActivity extends AppCompatActivity {
 
                 }
                 mResultTextView.setText(code);
+
+                downLoadFromServer(code);
             }
         });
     }
-    /*
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_menu, menu);
         return true;
     }
-
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.editButton_btn:
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch(item.getItemId()){
+            case R.id.longCode_cbox:
+                if(item.isChecked()){
+                    // If item already checked then unchecked it
+                    item.setChecked(false);
+                    longCodeMode = false;
+                }else {
+                    // If item is unchecked then checked it
+                    item.setChecked(true);
+                    longCodeMode = true;
+                }
+                // Update the text view text style
                 return true;
             default:
-                // If we got here, the user's action was not recognized.
-                // Invoke the superclass to handle it.
                 return super.onOptionsItemSelected(item);
-
         }
     }
-    */
+
     public void supplier_btn_onclick(View v){
         final TextView textView = (TextView)v;
         supplierTextView.setText(textView.getText().toString());
@@ -220,31 +228,32 @@ public class FullscreenActivity extends AppCompatActivity {
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        String gimt = "";
+        String checkString = "";
+        String longCode = "";
         if (requestCode == BARCODE_READER_REQUEST_CODE) {
             if (resultCode == CommonStatusCodes.SUCCESS) {
                 if (data != null) {
                     Barcode barcode = data.getParcelableExtra(BarcodeCaptureActivity.BarcodeObject);
                     Point[] p = barcode.cornerPoints;
-                    mResultTextView.setText(barcode.displayValue);
-
-                    new JSONResponse(this, "http://35.198.198.0/scan?action=scan&code="+barcode.displayValue, new JSONResponse.onComplete() {
-                        @Override
-                        public void onComplete(JSONObject json) {
-                            Log.d("ORM",json.toString());
-                            try {
-                                String productName = json.getString("productName");
-                                String code = json.getString("code");
-                                String supplier = json.getString("supplierName");
-                                productTextView.setText(productName);
-                                supplierTextView.setText(supplier);
-                                Toast.makeText(getApplicationContext(), "information aquired", Toast.LENGTH_SHORT).show();
-                            } catch(Exception e) {
-                                Log.e("ORM","FullScreenActivity onActivity Result : "+e.toString());
+                    if(longCodeMode){
+                        longCode = barcode.displayValue;
+                        char[] longCodeArray = longCode.toCharArray();
+                        for(int x=0;x<longCode.length();x++){
+                            if(longCode.length() - x > 1){
+                                checkString = "" + longCodeArray[x] + longCodeArray[x+1];
+                            }
+                            if(checkString.equals("17")){
+                                gimt = longCode.substring(0,x);
+                                break;
                             }
                         }
-                    });
+                        mResultTextView.setText(gimt);
+                    }else{
+                        mResultTextView.setText(longCode);
+                    }
 
-
+                    downLoadFromServer(gimt);
 
                 } else mResultTextView.setText(R.string.no_barcode_captured);
             } else Log.e(LOG_TAG, String.format(getString(R.string.barcode_error_format),
@@ -300,5 +309,24 @@ public class FullscreenActivity extends AppCompatActivity {
         });
 
         popup.show();//showing popup menu
+    }
+
+    public void downLoadFromServer(String gimt){
+        new JSONResponse(this, "http://35.198.198.0/scan?action=scan&code="+ gimt, new JSONResponse.onComplete() {
+            @Override
+            public void onComplete(JSONObject json) {
+                Log.d("ORM",json.toString());
+                try {
+                    String productName = json.getString("productName");
+                    String code = json.getString("code");
+                    String supplier = json.getString("supplierName");
+                    productTextView.setText(productName);
+                    supplierTextView.setText(supplier);
+                    Toast.makeText(getApplicationContext(), "information aquired", Toast.LENGTH_SHORT).show();
+                } catch(Exception e) {
+                    Log.e("ORM","FullScreenActivity onActivity Result : "+e.toString());
+                }
+            }
+        });
     }
 }
