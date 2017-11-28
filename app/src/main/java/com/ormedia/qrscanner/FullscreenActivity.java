@@ -270,7 +270,7 @@ public class FullscreenActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         String GTIN = "";
-        String checkString = "";
+        String checkString="";
         String longCode;
         if (requestCode == BARCODE_READER_REQUEST_CODE) {
             if (resultCode == CommonStatusCodes.SUCCESS) {
@@ -309,7 +309,8 @@ public class FullscreenActivity extends AppCompatActivity {
     public void showEditButtonDialog(View v){
         final Button textView = (Button)v;
         LayoutInflater layoutInflaterAndroid = LayoutInflater.from(this);
-        View mView = layoutInflaterAndroid.inflate(R.layout.editbutton_dialog, null);
+        View mView;
+        mView = layoutInflaterAndroid.inflate(R.layout.editbutton_dialog,null  );
         AlertDialog.Builder alertDialogBuilderUserInput = new AlertDialog.Builder(this);
         alertDialogBuilderUserInput.setView(mView);
 
