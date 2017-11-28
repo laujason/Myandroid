@@ -302,8 +302,13 @@ public class FullscreenActivity extends AppCompatActivity {
                                 break;
                             }
                         }
-                        mResultTextView.setText(gimt);
-                        downLoadFromServer(gimt);
+                        if (gimt.equals("")){
+                            mResultTextView.setText(longCode);
+                            downLoadFromServer(longCode);
+                        }else {
+                            mResultTextView.setText(gimt);
+                            downLoadFromServer(gimt);
+                        }
                     }else{
                         mResultTextView.setText(longCode);
                         downLoadFromServer(longCode);
