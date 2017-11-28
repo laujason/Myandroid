@@ -70,7 +70,7 @@ public class FullscreenActivity extends AppCompatActivity {
         trimbTextview = (TextView) findViewById(R.id.trim_before_textview);
         trimaTextview = (TextView) findViewById(R.id.trim_after_textview);
         productTextView.requestFocus();
-        Button scanBarcodeButton = (Button) findViewById(R.id.scan_barcode_button);
+        Button scanBarcodeButton = (Button) findViewById(R.id.scan_btn);
         Button supplierButton1 = (Button) findViewById(R.id.supplier_btn1);
         Button supplierButton2 = (Button) findViewById(R.id.supplier_btn2);
         Button supplierButton3 = (Button) findViewById(R.id.supplier_btn3);
@@ -84,22 +84,8 @@ public class FullscreenActivity extends AppCompatActivity {
         Button productButton7 = (Button) findViewById(R.id.product_btn7);
         Button productButton8 = (Button) findViewById(R.id.product_btn8);
         Button productButton9 = (Button) findViewById(R.id.product_btn9);
-        Button submitBarcodeButton = (Button) findViewById(R.id.submit_button);
+        Button submitBarcodeButton = (Button) findViewById(R.id.upload_btn);
         Button trimButton = (Button) findViewById(R.id.trim_button);
-        scanBarcodeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), BarcodeCaptureActivity.class);
-                startActivityForResult(intent, BARCODE_READER_REQUEST_CODE);
-            }
-        });
-
-        submitBarcodeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                update(mResultTextView.getText().toString(), productTextView.getText().toString(), supplierTextView.getText().toString());
-            }
-        });
 
         supplierButton1.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
@@ -254,10 +240,17 @@ public class FullscreenActivity extends AppCompatActivity {
                     longCodeMode = true;
                 }
                 // Update the text view text style
-                return true;
+            case R.id.scan_btn:
+                Intent intent = new Intent(getApplicationContext(), BarcodeCaptureActivity.class);
+                startActivityForResult(intent, BARCODE_READER_REQUEST_CODE);
+                break;
+            case R.id.upload_btn:
+                update(mResultTextView.getText().toString(), productTextView.getText().toString(), supplierTextView.getText().toString());
+                break;
             default:
                 return super.onOptionsItemSelected(item);
         }
+        return true;
     }
 
     public void supplier_btn_onclick(View v){

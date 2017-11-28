@@ -10,7 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="top"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingTop="30dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -32,7 +33,7 @@
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="TRIM/SCAN" />
+                android:text="TRIM/Search" />
 
             <EditText
                 android:id="@+id/trim_after_textview"
@@ -73,95 +74,176 @@
             android:hint="Supplier"
             android:inputType="textPersonName" />
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Supplier Button"
+            android:layout_marginTop="20dp"
+            android:textAlignment="center"/>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:weightSum="3">
 
             <Button
                 android:id="@+id/supplier_btn1"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:textAllCaps="false"
                 android:onClick="supplier_btn_onclick"
+                android:ellipsize="end"
+                android:lines="1"
                 android:text="SIEMENS" />
 
             <Button
                 android:id="@+id/supplier_btn2"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:onClick="supplier_btn_onclick"
-                android:text="SIEMENS" />
+                android:textAllCaps="false"
+                android:ellipsize="end"
+                android:lines="1"
+                android:onClick="supplier_btn_onclick" />
 
             <Button
                 android:id="@+id/supplier_btn3"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:onClick="supplier_btn_onclick"
-                android:text="SIEMENS" />
+                android:textAllCaps="false"
+                android:ellipsize="end"
+                android:lines="1"
+                android:onClick="supplier_btn_onclick" />
+
+        </LinearLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Product Button"
+            android:layout_marginTop="20dp"
+            android:textAlignment="center"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+
+            <Button
+                android:id="@+id/product_btn7"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:textAllCaps="false"
+                android:lines="1"
+                android:onClick="product_btn_onclick"
+                android:text="Pipette Tips"/>
+
+            <Button
+                android:id="@+id/product_btn8"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textAllCaps="false"
+                android:ellipsize="end"
+                android:lines="1"
+                android:onClick="product_btn_onclick" />
+
+            <Button
+                android:id="@+id/product_btn9"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:lines="1"
+                android:textAllCaps="false"
+                android:onClick="product_btn_onclick" />
+
+
 
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:weightSum="3">
 
             <Button
-                android:id="@+id/supplier_btn4"
-                android:layout_width="wrap_content"
+                android:id="@+id/product_btn1"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:onClick="supplier_btn_onclick"
-                android:text="SIEMENS" />
+                android:textAllCaps="false"
+                android:ellipsize="end"
+                android:lines="1"
+                android:onClick="product_btn_onclick" />
 
             <Button
-                android:id="@+id/supplier_btn5"
-                android:layout_width="wrap_content"
+                android:id="@+id/product_btn2"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:onClick="supplier_btn_onclick"
-                android:text="SIEMENS" />
+                android:textAllCaps="false"
+                android:ellipsize="end"
+                android:lines="1"
+                android:onClick="product_btn_onclick" />
 
             <Button
-                android:id="@+id/supplier_btn6"
-                android:layout_width="wrap_content"
+                android:id="@+id/product_btn3"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:onClick="supplier_btn_onclick"
-                android:text="SIEMENS" />
+                android:textAllCaps="false"
+                android:ellipsize="end"
+                android:lines="1"
+                android:onClick="product_btn_onclick" />
+
+
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="3">
+
+            <Button
+                android:id="@+id/product_btn4"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textAllCaps="false"
+                android:ellipsize="end"
+                android:lines="1"
+                android:onClick="product_btn_onclick" />
+
+            <Button
+                android:id="@+id/product_btn5"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textAllCaps="false"
+                android:ellipsize="end"
+                android:lines="1"
+                android:onClick="product_btn_onclick" />
+
+            <Button
+                android:id="@+id/product_btn6"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textAllCaps="false"
+                android:ellipsize="end"
+                android:lines="1"
+                android:onClick="product_btn_onclick" />
+
+
 
         </LinearLayout>
 
     </LinearLayout>
 
-
-    <Button
-        android:id="@+id/scan_barcode_button"
-        android:layout_width="fill_parent"
-        android:layout_height="60dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="21dp"
-        android:layout_marginEnd="250dp"
-        android:layout_marginStart="20dp"
-        android:background="@color/colorAccent"
-        android:text="@string/scan_barcode_button"
-        android:textColor="@color/colorWhite"
-        android:textSize="20sp" />
-
-    <Button
-        android:id="@+id/submit_button"
-        android:layout_width="fill_parent"
-        android:layout_height="60dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="21dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginStart="250dp"
-        android:background="@color/colorAccent"
-        android:text="@string/submit_button"
-        android:textColor="@color/colorWhite"
-        android:textSize="20sp" />
 </RelativeLayout>

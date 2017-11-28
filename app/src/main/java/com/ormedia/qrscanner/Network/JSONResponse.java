@@ -70,41 +70,4 @@ public class JSONResponse {
     return c;
     }
 
-
-
-
-//    public void parse() {
-//
-//
-//        if (responseText != null) {
-//            try {
-//                JSONObject jsonObj = new JSONObject(responseText);
-//                JSONArray unitPt = jsonObj.getJSONArray("data");
-//
-//                // looping through All Contacts
-//                for (int i = 0; i < unitPt.length(); i++) {
-//                    JSONObject c = unitPt.getJSONObject(i);
-//
-//                    String id = c.getString("id");
-//                    String building_zh = c.getString("building_zh");
-//                    String street_zh = c.getString("street_zh");
-//                    String price = c.getString("price");
-//                    JSONArray k = c.getJSONArray("images");
-//                    String image = k.getJSONArray(0).getString(0);
-//
-//                    // tmp hashmap for single contact
-//                    Unit unit = new Unit(id,building_zh,street_zh,image,price);
-//
-//                    //contact.put(TAG_PHONE_MOBILE, mobile);
-//
-//                    // adding contact to contact list
-////                    unitList.add(unit);
-//                }
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//    }
-
-
 }
