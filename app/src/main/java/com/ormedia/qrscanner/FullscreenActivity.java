@@ -74,9 +74,16 @@ public class FullscreenActivity extends AppCompatActivity {
         Button supplierButton1 = (Button) findViewById(R.id.supplier_btn1);
         Button supplierButton2 = (Button) findViewById(R.id.supplier_btn2);
         Button supplierButton3 = (Button) findViewById(R.id.supplier_btn3);
-        Button supplierButton4 = (Button) findViewById(R.id.supplier_btn4);
-        Button supplierButton5 = (Button) findViewById(R.id.supplier_btn5);
-        Button supplierButton6 = (Button) findViewById(R.id.supplier_btn6);
+
+        Button productButton1 = (Button) findViewById(R.id.product_btn1);
+        Button productButton2 = (Button) findViewById(R.id.product_btn2);
+        Button productButton3 = (Button) findViewById(R.id.product_btn3);
+        Button productButton4 = (Button) findViewById(R.id.product_btn4);
+        Button productButton5 = (Button) findViewById(R.id.product_btn5);
+        Button productButton6 = (Button) findViewById(R.id.product_btn6);
+        Button productButton7 = (Button) findViewById(R.id.product_btn7);
+        Button productButton8 = (Button) findViewById(R.id.product_btn8);
+        Button productButton9 = (Button) findViewById(R.id.product_btn9);
         Button submitBarcodeButton = (Button) findViewById(R.id.submit_button);
         Button trimButton = (Button) findViewById(R.id.trim_button);
         scanBarcodeButton.setOnClickListener(new View.OnClickListener() {
@@ -118,7 +125,7 @@ public class FullscreenActivity extends AppCompatActivity {
             }
         });
 
-        supplierButton4.setOnLongClickListener(new View.OnLongClickListener() {
+        productButton1.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
                 showSupplierButtonPopup(v);
@@ -126,7 +133,7 @@ public class FullscreenActivity extends AppCompatActivity {
             }
         });
 
-        supplierButton5.setOnLongClickListener(new View.OnLongClickListener() {
+        productButton2.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
                 showSupplierButtonPopup(v);
@@ -134,7 +141,54 @@ public class FullscreenActivity extends AppCompatActivity {
             }
         });
 
-        supplierButton6.setOnLongClickListener(new View.OnLongClickListener() {
+        productButton3.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                showSupplierButtonPopup(v);
+                return true;
+            }
+        });
+
+        productButton4.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                showSupplierButtonPopup(v);
+                return true;
+            }
+        });
+
+        productButton5.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                showSupplierButtonPopup(v);
+                return true;
+            }
+        });
+
+        productButton6.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                showSupplierButtonPopup(v);
+                return true;
+            }
+        });
+        productButton7.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                showSupplierButtonPopup(v);
+                return true;
+            }
+        });
+
+        productButton8.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                showSupplierButtonPopup(v);
+                return true;
+            }
+        });
+
+        productButton9.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
                 showSupplierButtonPopup(v);
@@ -210,6 +264,12 @@ public class FullscreenActivity extends AppCompatActivity {
         final TextView textView = (TextView)v;
         supplierTextView.setText(textView.getText().toString());
     }
+
+    public void product_btn_onclick(View v){
+        final TextView textView = (TextView)v;
+        productTextView.append(textView.getText().toString());
+    }
+
     public void update(String code, String productName, String supplier) {
         new JSONResponse(this, "http://35.198.198.0/scan?action=save&code="+code+"&productName="+productName+"&supplierName="+supplier, new JSONResponse.onComplete() {
             @Override
@@ -236,24 +296,24 @@ public class FullscreenActivity extends AppCompatActivity {
                 if (data != null) {
                     Barcode barcode = data.getParcelableExtra(BarcodeCaptureActivity.BarcodeObject);
                     Point[] p = barcode.cornerPoints;
+                    longCode = barcode.displayValue;
                     if(longCodeMode){
-                        longCode = barcode.displayValue;
                         char[] longCodeArray = longCode.toCharArray();
-                        for(int x=0;x<longCode.length();x++){
+                        for(int x=13;x<longCode.length();x++){
                             if(longCode.length() - x > 1){
                                 checkString = "" + longCodeArray[x] + longCodeArray[x+1];
                             }
-                            if(checkString.equals("17")){
+                            if(checkString.equals("17") || checkString.equals("10")){
                                 gimt = longCode.substring(0,x);
                                 break;
                             }
                         }
                         mResultTextView.setText(gimt);
+                        downLoadFromServer(gimt);
                     }else{
                         mResultTextView.setText(longCode);
+                        downLoadFromServer(longCode);
                     }
-
-                    downLoadFromServer(gimt);
 
                 } else mResultTextView.setText(R.string.no_barcode_captured);
             } else Log.e(LOG_TAG, String.format(getString(R.string.barcode_error_format),
@@ -261,13 +321,14 @@ public class FullscreenActivity extends AppCompatActivity {
         } else super.onActivityResult(requestCode, resultCode, data);
     }
     public void showEditButtonDialog(View v){
-        final TextView textView = (TextView)v;
+        final Button textView = (Button)v;
         LayoutInflater layoutInflaterAndroid = LayoutInflater.from(this);
         View mView = layoutInflaterAndroid.inflate(R.layout.editbutton_dialog, null);
         AlertDialog.Builder alertDialogBuilderUserInput = new AlertDialog.Builder(this);
         alertDialogBuilderUserInput.setView(mView);
 
         final EditText supplierName = (EditText) mView.findViewById(R.id.btnText_id);
+        supplierName.setText(textView.getText().toString());
         alertDialogBuilderUserInput
                 .setCancelable(false)
                 .setPositiveButton("Update", new DialogInterface.OnClickListener() {
