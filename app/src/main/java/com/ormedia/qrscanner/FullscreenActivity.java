@@ -36,6 +36,9 @@ import com.ormedia.qrscanner.Network.*;
 
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.zip.Inflater;
 
 import static android.app.PendingIntent.getActivity;
@@ -239,6 +242,7 @@ public class FullscreenActivity extends AppCompatActivity {
                     item.setChecked(true);
                     longCodeMode = true;
                 }
+                break;
                 // Update the text view text style
             case R.id.scan_btn:
                 Intent intent = new Intent(getApplicationContext(), BarcodeCaptureActivity.class);
@@ -264,14 +268,11 @@ public class FullscreenActivity extends AppCompatActivity {
     }
 
     public void update(String code, String productName, String supplier) {
-        new JSONResponse(this, "http://35.198.198.0/scan?action=save&code="+code+"&productName="+productName+"&supplierName="+supplier, new JSONResponse.onComplete() {
+        new JSONResponse(this, "http://35.198.198.0/scan?action=save&code="+ encode(code)+"&productName="+ encode(productName)+"&supplierName="+encode(supplier), new JSONResponse.onComplete() {
             @Override
             public void onComplete(JSONObject json) {
                 Log.d("ORM",json.toString());
                 try {
-                    String productName = json.getString("productName");
-                    String code = json.getString("code");
-                    String supplier = json.getString("supplierName");
                     Toast.makeText(getApplicationContext(), "information updated", Toast.LENGTH_SHORT).show();
                 } catch(Exception e) {
                     Log.e("ORM","FullScreenActivity onActivity Result : "+e.toString());
@@ -366,13 +367,12 @@ public class FullscreenActivity extends AppCompatActivity {
     }
 
     public void downLoadFromServer(String gimt){
-        new JSONResponse(this, "http://35.198.198.0/scan?action=scan&code="+ gimt, new JSONResponse.onComplete() {
+        new JSONResponse(this, "http://35.198.198.0/scan?action=scan&code="+ encode(gimt), new JSONResponse.onComplete() {
             @Override
             public void onComplete(JSONObject json) {
                 Log.d("ORM",json.toString());
                 try {
                     String productName = json.getString("productName");
-                    String code = json.getString("code");
                     String supplier = json.getString("supplierName");
                     productTextView.setText(productName);
                     supplierTextView.setText(supplier);
@@ -383,4 +383,28 @@ public class FullscreenActivity extends AppCompatActivity {
             }
         });
     }
+
+    public static String decode(String url) {
+        try {
+            String prevURL = "";
+            String decodeURL = url;
+            while(!prevURL.equals(decodeURL)) {
+                prevURL = decodeURL;
+                decodeURL = URLDecoder.decode( decodeURL, "UTF-8" );
+            }
+            return decodeURL;
+        } catch (UnsupportedEncodingException e) {
+            return "Error: " + e.getMessage();
+        }
+    }
+    // 百分比編碼函數
+    public static String encode(String url) {
+        try {
+            String encodeURL = URLEncoder.encode( url, "UTF-8" );
+            return encodeURL;
+        } catch (UnsupportedEncodingException e) {
+            return "Error: " + e.getMessage();
+        }
+    }
+
 }
