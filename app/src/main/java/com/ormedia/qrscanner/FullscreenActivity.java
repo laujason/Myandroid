@@ -2,10 +2,8 @@ package com.ormedia.qrscanner;
 
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.PopupMenu;
@@ -15,18 +13,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.content.Intent;
 import android.graphics.Point;
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.CommonStatusCodes;
@@ -39,9 +30,7 @@ import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
-import java.util.zip.Inflater;
 
-import static android.app.PendingIntent.getActivity;
 
 
 /**
@@ -67,28 +56,26 @@ public class FullscreenActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_fullscreen);
 
-        mResultTextView = (TextView) findViewById(R.id.result_textview);
-        productTextView = (TextView) findViewById(R.id.product_name_textview);
-        supplierTextView = (TextView) findViewById(R.id.supplier_textview);
-        trimbTextview = (TextView) findViewById(R.id.trim_before_textview);
-        trimaTextview = (TextView) findViewById(R.id.trim_after_textview);
+        mResultTextView =  findViewById(R.id.result_textview);
+        productTextView =  findViewById(R.id.product_name_textview);
+        supplierTextView = findViewById(R.id.supplier_textview);
+        trimbTextview =  findViewById(R.id.trim_before_textview);
+        trimaTextview =  findViewById(R.id.trim_after_textview);
         productTextView.requestFocus();
-        Button scanBarcodeButton = (Button) findViewById(R.id.scan_btn);
-        Button supplierButton1 = (Button) findViewById(R.id.supplier_btn1);
-        Button supplierButton2 = (Button) findViewById(R.id.supplier_btn2);
-        Button supplierButton3 = (Button) findViewById(R.id.supplier_btn3);
+        Button supplierButton1 =  findViewById(R.id.supplier_btn1);
+        Button supplierButton2 =  findViewById(R.id.supplier_btn2);
+        Button supplierButton3 =  findViewById(R.id.supplier_btn3);
 
-        Button productButton1 = (Button) findViewById(R.id.product_btn1);
-        Button productButton2 = (Button) findViewById(R.id.product_btn2);
-        Button productButton3 = (Button) findViewById(R.id.product_btn3);
-        Button productButton4 = (Button) findViewById(R.id.product_btn4);
-        Button productButton5 = (Button) findViewById(R.id.product_btn5);
-        Button productButton6 = (Button) findViewById(R.id.product_btn6);
-        Button productButton7 = (Button) findViewById(R.id.product_btn7);
-        Button productButton8 = (Button) findViewById(R.id.product_btn8);
-        Button productButton9 = (Button) findViewById(R.id.product_btn9);
-        Button submitBarcodeButton = (Button) findViewById(R.id.upload_btn);
-        Button trimButton = (Button) findViewById(R.id.trim_button);
+        Button productButton1 =  findViewById(R.id.product_btn1);
+        Button productButton2 =  findViewById(R.id.product_btn2);
+        Button productButton3 =  findViewById(R.id.product_btn3);
+        Button productButton4 =  findViewById(R.id.product_btn4);
+        Button productButton5 =  findViewById(R.id.product_btn5);
+        Button productButton6 =  findViewById(R.id.product_btn6);
+        Button productButton7 =  findViewById(R.id.product_btn7);
+        Button productButton8 =  findViewById(R.id.product_btn8);
+        Button productButton9 =  findViewById(R.id.product_btn9);
+        Button trimButton =  findViewById(R.id.trim_button);
 
         supplierButton1.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
@@ -191,7 +178,7 @@ public class FullscreenActivity extends AppCompatActivity {
                 try {
                     code = mResultTextView.getText().toString();
                 }catch (Exception e) {
-
+                    e.printStackTrace();
                 }
 
                 int trimbefore;
@@ -214,7 +201,7 @@ public class FullscreenActivity extends AppCompatActivity {
                     code = code.substring(0,code.length()-trimafter);
                     Log.d("ORM", code);
                 } catch (Exception e) {
-
+                    e.printStackTrace();
                 }
                 mResultTextView.setText(code);
 
@@ -282,9 +269,9 @@ public class FullscreenActivity extends AppCompatActivity {
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        String gimt = "";
+        String GTIN = "";
         String checkString = "";
-        String longCode = "";
+        String longCode;
         if (requestCode == BARCODE_READER_REQUEST_CODE) {
             if (resultCode == CommonStatusCodes.SUCCESS) {
                 if (data != null) {
@@ -293,21 +280,21 @@ public class FullscreenActivity extends AppCompatActivity {
                     longCode = barcode.displayValue;
                     if(longCodeMode){
                         char[] longCodeArray = longCode.toCharArray();
-                        for(int x=13;x<longCode.length();x++){
+                        for(int x=10;x<longCode.length();x++){
                             if(longCode.length() - x > 1){
                                 checkString = "" + longCodeArray[x] + longCodeArray[x+1];
                             }
                             if(checkString.equals("17") || checkString.equals("10")){
-                                gimt = longCode.substring(0,x);
+                                GTIN = longCode.substring(0,x);
                                 break;
                             }
                         }
-                        if (gimt.equals("")){
+                        if (GTIN.equals("")){
                             mResultTextView.setText(longCode);
                             downLoadFromServer(longCode);
                         }else {
-                            mResultTextView.setText(gimt);
-                            downLoadFromServer(gimt);
+                            mResultTextView.setText(GTIN);
+                            downLoadFromServer(GTIN);
                         }
                     }else{
                         mResultTextView.setText(longCode);
@@ -326,7 +313,7 @@ public class FullscreenActivity extends AppCompatActivity {
         AlertDialog.Builder alertDialogBuilderUserInput = new AlertDialog.Builder(this);
         alertDialogBuilderUserInput.setView(mView);
 
-        final EditText supplierName = (EditText) mView.findViewById(R.id.btnText_id);
+        final EditText supplierName =  mView.findViewById(R.id.btnText_id);
         supplierName.setText(textView.getText().toString());
         alertDialogBuilderUserInput
                 .setCancelable(false)
@@ -371,8 +358,8 @@ public class FullscreenActivity extends AppCompatActivity {
         popup.show();//showing popup menu
     }
 
-    public void downLoadFromServer(String gimt){
-        new JSONResponse(this, "http://35.198.198.0/scan?action=scan&code="+ encode(gimt), new JSONResponse.onComplete() {
+    public void downLoadFromServer(String GTIN){
+        new JSONResponse(this, "http://35.198.198.0/scan?action=scan&code="+ encode(GTIN), new JSONResponse.onComplete() {
             @Override
             public void onComplete(JSONObject json) {
                 Log.d("ORM",json.toString());
