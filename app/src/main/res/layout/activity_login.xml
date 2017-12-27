@@ -34,7 +34,6 @@
             android:layout_height="wrap_content"
             android:layout_alignStart="@+id/txt_phone"
             android:layout_below="@+id/textView"
-            android:layout_marginBottom="10dp"
             android:background="@color/colorWhite"
             android:ems="10"
             android:inputType="textPassword" />
@@ -60,7 +59,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignStart="@+id/txt_psw"
-            android:layout_below="@+id/txt_psw"
+            android:layout_below="@+id/txt_error"
             android:text="免責聲明：" />
 
         <EditText
@@ -95,6 +94,18 @@
             android:layout_alignEnd="@+id/txt_disclaimer"
             android:layout_below="@+id/cb_read"
             android:text="登入" />
+
+        <TextView
+            android:id="@+id/txt_error"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/txt_psw"
+            android:layout_alignStart="@+id/textView3"
+            android:layout_below="@+id/txt_psw"
+            android:layout_marginBottom="10dp"
+            android:text="用戶名或密碼錯誤"
+            android:textColor="@android:color/holo_red_light"
+            android:visibility="invisible" />
 
 
     </RelativeLayout>
