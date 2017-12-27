@@ -15,20 +15,15 @@ public class home extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_home);
-
         Intent intent = getIntent();
         String message = intent.getStringExtra(login.msg_userid);
-
-        // Capture the layout's TextView and set the string as its text
         TextView textView = findViewById(R.id.textView4);
         textView.setText("login user: "+message);
-
     }
     @Override
     public void onBackPressed() {
-        Toast.makeText(getApplicationContext(), "cannot go back", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getApplicationContext(), "cannot go back", Toast.LENGTH_SHORT).show();
     }
 
 }
