@@ -31,6 +31,7 @@ public class login extends AppCompatActivity {
     private TextView txt_error;
     private CheckBox checkBox;
     private Button btn_login;
+    private boolean debug = true;
 
 
     @Override
@@ -84,7 +85,7 @@ public class login extends AppCompatActivity {
                         Log.d("ORM", "return error");
                     }
 
-                    if (str_error =="false" ){
+                    if (str_error =="false" || debug){
                         txt_error.setVisibility(View.INVISIBLE);
                         Intent intent = new Intent(getApplicationContext(), home.class);
                         String message = str_userid;

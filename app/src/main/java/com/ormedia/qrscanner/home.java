@@ -18,8 +18,8 @@ public class home extends AppCompatActivity {
         setContentView(R.layout.activity_home);
         Intent intent = getIntent();
         String message = intent.getStringExtra(login.msg_userid);
-        TextView textView = findViewById(R.id.textView4);
-        textView.setText("login user: "+message);
+        //TextView textView = findViewById(R.id.textView4);
+        //textView.setText("login user: "+message);
     }
     @Override
     public void onBackPressed() {
