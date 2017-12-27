@@ -18,22 +18,84 @@
         android:layout_height="match_parent">
 
         <EditText
-            android:id="@+id/editText"
-            android:layout_width="100dp"
+            android:id="@+id/txt_phone"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:ems="10"
+            android:layout_below="@+id/textView2"
             android:layout_centerHorizontal="true"
-            android:inputType="textPersonName"
-            android:text="Name" />
+            android:background="@color/colorWhite"
+            android:ems="10"
+            android:inputType="phone" />
 
         <EditText
-            android:id="@+id/editText2"
-            android:layout_width="100dp"
+            android:id="@+id/txt_psw"
+            style="@style/Widget.AppCompat.EditText"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:layout_alignStart="@+id/editText"
-            android:layout_below="@+id/editText"
+            android:layout_alignStart="@+id/txt_phone"
+            android:layout_below="@+id/textView"
+            android:layout_marginBottom="10dp"
+            android:background="@color/colorWhite"
             android:ems="10"
-            android:inputType="textPersonName"
-            android:text="Name" />
+            android:inputType="textPassword" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/txt_phone"
+            android:layout_below="@+id/txt_phone"
+            android:text="密碼：" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignStart="@+id/txt_phone"
+            android:text="電話號碼：" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/txt_psw"
+            android:layout_below="@+id/txt_psw"
+            android:text="免責聲明：" />
+
+        <EditText
+            android:id="@+id/txt_disclaimer"
+            style="@style/Widget.AppCompat.EditText"
+            android:layout_width="200dp"
+            android:layout_height="150dp"
+            android:layout_alignStart="@+id/textView3"
+            android:layout_below="@+id/textView3"
+            android:layout_marginBottom="10dp"
+            android:background="@color/colorWhite"
+            android:ems="10"
+            android:inputType="textMultiLine"
+            android:singleLine="false" />
+
+        <CheckBox
+            android:id="@+id/cb_read"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/txt_disclaimer"
+            android:layout_below="@+id/txt_disclaimer"
+            android:layout_marginTop="20dp"
+            android:paddingBottom="10dp"
+            android:text="本人已閱讀並同意有關聲明。"
+            android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/btn_login"
+            style="@style/Widget.AppCompat.Button"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/txt_disclaimer"
+            android:layout_below="@+id/cb_read"
+            android:text="登入" />
+
+
     </RelativeLayout>
 </LinearLayout>
