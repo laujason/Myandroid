@@ -39,8 +39,19 @@
     </activity>
 
         <activity android:name=".home"
-            android:parentActivityName=".login" >
+            android:parentActivityName=".login"
+            android:windowSoftInputMode="stateHidden">
             <!-- The meta-data tag is required if you support API level 15 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".home" />
+        </activity>
+        <activity android:name=".FullscreenActivity"
+            android:parentActivityName=".home"
+            android:windowSoftInputMode="stateHidden"
+            android:theme="@style/Theme.AppCompat.DayNight.DarkActionBar">
+
+        <!-- The meta-data tag is required if you support API level 15 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".home" />

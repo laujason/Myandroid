@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.PopupMenu;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -47,6 +49,8 @@ public class FullscreenActivity extends AppCompatActivity {
     private TextView supplierTextView;
     private TextView trimbTextview;
     private TextView trimaTextview;
+    private TextView txt_codelen;
+    private TextView txt_code;
     private String code;
     private boolean longCodeMode;
 
@@ -61,6 +65,8 @@ public class FullscreenActivity extends AppCompatActivity {
         supplierTextView = findViewById(R.id.supplier_textview);
         trimbTextview =  findViewById(R.id.trim_before_textview);
         trimaTextview =  findViewById(R.id.trim_after_textview);
+        txt_codelen = findViewById(R.id.txt_codelen);
+        txt_code = findViewById(R.id.txt_code);
         productTextView.requestFocus();
         Button supplierButton1 =  findViewById(R.id.supplier_btn1);
         Button supplierButton2 =  findViewById(R.id.supplier_btn2);
@@ -208,6 +214,26 @@ public class FullscreenActivity extends AppCompatActivity {
                 downLoadFromServer(code);
             }
         });
+
+        mResultTextView.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start,
+                                          int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start,
+                                      int before, int count) {
+                if(s.length() != 0){
+                    txt_codelen.setText(String.valueOf(s.length()));
+                }
+
+            }
+        });
     }
 
     @Override
@@ -255,7 +281,7 @@ public class FullscreenActivity extends AppCompatActivity {
     }
 
     public void update(String code, String productName, String supplier) {
-        new JSONResponse(this, "http://35.198.198.0/scan?action=save&code="+ encode(code)+"&productName="+ encode(productName)+"&supplierName="+encode(supplier), new JSONResponse.onComplete() {
+        new JSONResponse(this, "http://35.198.210.107/scan?action=save&code="+ encode(code)+"&productName="+ encode(productName)+"&supplierName="+encode(supplier), new JSONResponse.onComplete() {
             @Override
             public void onComplete(JSONObject json) {
                 Log.d("ORM",json.toString());
@@ -360,15 +386,17 @@ public class FullscreenActivity extends AppCompatActivity {
     }
 
     public void downLoadFromServer(String GTIN){
-        new JSONResponse(this, "http://35.198.198.0/scan?action=scan&code="+ encode(GTIN), new JSONResponse.onComplete() {
+        new JSONResponse(this, "http://35.198.210.107/scan?action=scan&code="+ encode(GTIN), new JSONResponse.onComplete() {
             @Override
             public void onComplete(JSONObject json) {
                 Log.d("ORM",json.toString());
                 try {
+                    String GTIN = json.getString("code");
                     String productName = json.getString("productName");
                     String supplier = json.getString("supplierName");
                     productTextView.setText(productName);
                     supplierTextView.setText(supplier);
+                    txt_code.setText(GTIN);
                     Toast.makeText(getApplicationContext(), "information aquired", Toast.LENGTH_SHORT).show();
                 } catch(Exception e) {
                     Log.e("ORM","FullScreenActivity onActivity Result : "+e.toString());

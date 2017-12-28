@@ -88,12 +88,13 @@
 
         <Button
             android:id="@+id/btn_login"
-            style="@style/Widget.AppCompat.Button"
+            style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="80dp"
-            android:layout_height="wrap_content"
+            android:layout_height="36dp"
             android:layout_alignEnd="@+id/txt_disclaimer"
             android:layout_below="@+id/cb_read"
-            android:text="登入" />
+            android:background="@drawable/login_btn"
+            android:elevation="0dp" />
 
         <TextView
             android:id="@+id/txt_error"

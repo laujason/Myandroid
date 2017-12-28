@@ -44,12 +44,13 @@
             app:srcCompat="@drawable/home_2_1" />
 
         <Button
-            android:id="@+id/button3"
+            android:id="@+id/btn_scan"
             android:layout_width="300dp"
             android:layout_height="100dp"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:alpha="0"
+            android:focusedByDefault="true"
             android:text="Button" />
     </RelativeLayout>
 
@@ -80,6 +81,7 @@
             android:layout_marginBottom="10dp"
             android:background="@drawable/home_3"
             android:ems="10"
+            android:focusedByDefault="false"
             android:inputType="textPersonName" />
 
         <TextView
@@ -152,7 +154,7 @@
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentTop="true"
                         android:layout_toEndOf="@+id/textView8"
-                        android:lines="2" />
+                        android:lines="4" />
 
                     <TextView
                         android:id="@+id/textView11"
