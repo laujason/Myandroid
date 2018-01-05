@@ -1,11 +1,13 @@
 package com.ormedia.qrscanner;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,17 +36,35 @@ public class home extends AppCompatActivity {
     private TextView txt_code;
     private Button btn_search;
     private Button btn_scan;
+    private Button btn_logout;
+    private Button btn_add;
+    private Button btn_sbtr;
     private String code;
+    private String method;
     private static final String LOG_TAG = FullscreenActivity.class.getSimpleName();
     private static final int BARCODE_READER_REQUEST_CODE = 1;
-
+    public static final String msg_method = "com.ormedia.qrscanner.method";
+    public static final String msg_code = "com.ormedia.qrscanner.code";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
         Intent intent = getIntent();
-        String message = intent.getStringExtra(login.msg_userid);
+        String msg_userid = intent.getStringExtra(login.msg_userid);
+        try {
+
+            code = intent.getStringExtra(home.msg_code);
+            method = intent.getStringExtra(home.msg_method);
+            Log.d("ORM","method= " + method);
+            if (code!=""){
+                downLoadFromServer(code);
+            }
+        } catch (Exception e){
+
+        }
+
         //TextView textView = findViewById(R.id.textView4);
         //textView.setText("login user: "+message);
 
@@ -54,7 +74,10 @@ public class home extends AppCompatActivity {
         txt_pdqty = findViewById(R.id.txt_pdqty);
         txt_code = findViewById(R.id.txt_code);
         btn_scan = findViewById(R.id.btn_scan);
+        btn_logout = findViewById(R.id.btn_logout);
         btn_search = findViewById(R.id.btn_serach);
+        btn_add = findViewById(R.id.btn_add);
+        btn_sbtr = findViewById(R.id.btn_sbtr);
         btn_scan.requestFocus();
 
         btn_scan.setOnClickListener(new View.OnClickListener() {
@@ -80,6 +103,40 @@ public class home extends AppCompatActivity {
                         InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
                         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                     }
+                }
+            }
+        });
+
+        btn_logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), login.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
+        btn_add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (productex()){
+                    Intent intent = new Intent(getApplicationContext(), inventory.class);
+                    intent.putExtra(msg_code, code);
+                    intent.putExtra(msg_method, "in");
+                    startActivity(intent);
+                }
+
+            }
+        });
+
+        btn_sbtr.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (productex()) {
+                    Intent intent = new Intent(getApplicationContext(), inventory.class);
+                    intent.putExtra(msg_code, code);
+                    intent.putExtra(msg_method, "out");
+                    startActivity(intent);
                 }
             }
         });
@@ -114,11 +171,17 @@ public class home extends AppCompatActivity {
                     String productName = json.getString("productName");
                     String supplier = json.getString("supplierName");
                     String quantity = json.getString("quantity");
+                    String productID = json.getString("postid");
+                    while ((productID.length()<5)){
+                        productID="0"+productID;
+                    }
                     productName = supplier +  "\n" + productName ;
                     txt_pdname.setText(productName);
+                    txt_pdcode.setText(productID);
                     txt_pdgtin.setText(GTIN);
+                    code = GTIN;
                     txt_pdqty.setText(quantity);
-                    Toast.makeText(getApplicationContext(), "information aquired", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getApplicationContext(), "information aquired", Toast.LENGTH_SHORT).show();
                 } catch(Exception e) {
                     Log.e("ORM","FullScreenActivity onActivity Result : "+e.toString());
                 }
@@ -166,6 +229,15 @@ public class home extends AppCompatActivity {
         } catch (UnsupportedEncodingException e) {
             return "Error: " + e.getMessage();
         }
+    }
+
+    private  Boolean productex() {
+        if (txt_pdname.getText().toString()!=""){
+            return true;
+        } else {
+            return false;
+        }
+
     }
 
 

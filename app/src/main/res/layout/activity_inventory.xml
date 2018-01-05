@@ -16,7 +16,7 @@
             android:layout_alignParentTop="true"
             android:adjustViewBounds="true"
             android:scaleType="fitXY"
-            app:srcCompat="@drawable/home_1" />
+            app:srcCompat="@drawable/header" />
 
         <ImageView
             android:id="@+id/img_title"
@@ -26,7 +26,7 @@
             android:layout_below="@+id/img_header"
             android:adjustViewBounds="true"
             android:scaleType="fitXY"
-            app:srcCompat="@drawable/home_2" />
+            app:srcCompat="@drawable/home_in" />
 
         <RelativeLayout
             android:id="@+id/relativeLayout2"
@@ -43,20 +43,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:layout_below="@+id/relativeLayout3"
+            android:layout_below="@+id/relativeLayout2"
             android:adjustViewBounds="true"
             android:scaleType="fitXY"
             app:srcCompat="@drawable/home_4" />
-
-        <RelativeLayout
-            android:id="@+id/relativeLayout3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/relativeLayout2"
-            android:background="@color/colorWhite">
-
-        </RelativeLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -66,9 +56,29 @@
             android:layout_below="@+id/imageView3"
             android:background="#F2F2F2">
 
+            <Button
+                android:id="@+id/btn_cancel"
+                android:layout_width="80dp"
+                android:layout_height="34dp"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="10dp"
+                android:layout_marginRight="5dp"
+                android:layout_toStartOf="@+id/btn_confirm"
+                android:background="@drawable/btn_cancel" />
+
+            <Button
+                android:id="@+id/btn_confirm"
+                android:layout_width="80dp"
+                android:layout_height="34dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginBottom="10dp"
+                android:layout_marginRight="20dp"
+                android:background="@drawable/btn_confirm" />
+
             <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
                 android:padding="20dp">
@@ -81,6 +91,14 @@
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/txt_INV"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/txt_ttp"
+                            android:layout_marginBottom="10dp"
+                            android:layout_toEndOf="@+id/txt_ttp" />
 
                         <TextView
                             android:id="@+id/textView8"
@@ -105,7 +123,7 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentStart="true"
                             android:layout_below="@+id/txt_pdname"
-                            android:paddingBottom="5dp"
+                            android:layout_marginBottom="10dp"
                             android:text="產品編號：" />
 
                         <TextView
@@ -114,8 +132,8 @@
                             android:layout_height="wrap_content"
                             android:layout_alignBaseline="@+id/textView11"
                             android:layout_alignBottom="@+id/textView11"
-                            android:layout_toEndOf="@+id/textView11"
-                            android:paddingBottom="5dp" />
+                            android:layout_marginBottom="10dp"
+                            android:layout_toEndOf="@+id/textView11" />
 
                         <TextView
                             android:id="@+id/textView14"
@@ -123,7 +141,7 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentStart="true"
                             android:layout_below="@+id/textView11"
-                            android:layout_marginBottom="5dp"
+                            android:layout_marginBottom="10dp"
                             android:text="GTIN：" />
 
                         <TextView
@@ -132,7 +150,7 @@
                             android:layout_height="wrap_content"
                             android:layout_alignStart="@+id/txt_pdcode"
                             android:layout_below="@+id/txt_pdcode"
-                            android:layout_marginBottom="5dp" />
+                            android:layout_marginBottom="10dp" />
 
                         <TextView
                             android:id="@+id/textView16"
@@ -140,7 +158,7 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentStart="true"
                             android:layout_below="@+id/textView14"
-                            android:layout_marginBottom="5dp"
+                            android:layout_marginBottom="10dp"
                             android:text="存量：" />
 
                         <TextView
@@ -148,24 +166,77 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_alignStart="@+id/txt_pdgtin"
-                            android:layout_below="@+id/textView14" />
+                            android:layout_below="@+id/textView14"
+                            android:layout_marginBottom="10dp" />
 
                         <TextView
                             android:id="@+id/textView4"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentStart="true"
-                            android:layout_below="@+id/textView16"
+                            android:layout_below="@+id/textView9"
+                            android:layout_marginBottom="5dp"
+                            android:text="備註：" />
+
+                        <TextView
+                            android:id="@+id/textView9"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:layout_below="@+id/txt_ttp"
+                            android:layout_marginBottom="10dp"
+                            android:text="INV：" />
+
+                        <TextView
+                            android:id="@+id/txt_ttp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:layout_below="@+id/txt_actqty"
+                            android:layout_marginBottom="10dp"
+                            android:text="合共價格：" />
+
+                        <TextView
+                            android:id="@+id/txt_ttprice"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/txt_actqty"
+                            android:layout_marginBottom="10dp"
+                            android:layout_toEndOf="@+id/txt_ttp"
+                            android:text="0" />
+
+                        <TextView
+                            android:id="@+id/txt_sup"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:layout_alignTop="@+id/txt_actqty"
+                            android:layout_marginBottom="10dp"
+                            android:layout_marginTop="10dp"
                             android:text="補充量：" />
 
                         <EditText
-                            android:id="@+id/editText2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:id="@+id/txt_actqty"
+                            android:layout_width="100dp"
+                            android:layout_height="40dp"
                             android:layout_alignStart="@+id/txt_pdqty"
                             android:layout_below="@+id/txt_pdqty"
+                            android:layout_marginBottom="5dp"
                             android:ems="10"
                             android:inputType="number" />
+
+                        <EditText
+                            android:id="@+id/txt_remark"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:layout_below="@+id/textView4"
+                            android:background="#FFFFFF"
+                            android:ems="10"
+                            android:gravity="top|left"
+                            android:inputType="textMultiLine"
+                            android:lines="5"
+                            android:textAlignment="gravity" />
 
                     </RelativeLayout>
 
@@ -175,4 +246,5 @@
         </RelativeLayout>
 
     </RelativeLayout>
+
 </RelativeLayout>
