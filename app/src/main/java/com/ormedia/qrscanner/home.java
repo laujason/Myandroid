@@ -75,6 +75,11 @@ public class home extends AppCompatActivity {
                     startActivity(intent);
                 } else {
                     downLoadFromServer(code);
+
+                    if (view != null) {
+                        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                    }
                 }
             }
         });
@@ -108,9 +113,11 @@ public class home extends AppCompatActivity {
                     String GTIN = json.getString("code");
                     String productName = json.getString("productName");
                     String supplier = json.getString("supplierName");
+                    String quantity = json.getString("quantity");
                     productName = supplier +  "\n" + productName ;
                     txt_pdname.setText(productName);
                     txt_pdgtin.setText(GTIN);
+                    txt_pdqty.setText(quantity);
                     Toast.makeText(getApplicationContext(), "information aquired", Toast.LENGTH_SHORT).show();
                 } catch(Exception e) {
                     Log.e("ORM","FullScreenActivity onActivity Result : "+e.toString());
