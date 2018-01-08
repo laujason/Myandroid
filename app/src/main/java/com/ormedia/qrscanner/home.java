@@ -181,7 +181,7 @@ public class home extends AppCompatActivity {
                     txt_pdgtin.setText(GTIN);
                     code = GTIN;
                     txt_pdqty.setText(quantity);
-                    //Toast.makeText(getApplicationContext(), "information aquired", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getApplicationContext(), "1234 aquired", Toast.LENGTH_SHORT).show();
                 } catch(Exception e) {
                     Log.e("ORM","FullScreenActivity onActivity Result : "+e.toString());
                 }

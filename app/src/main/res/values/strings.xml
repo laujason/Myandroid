@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">QR Scanner</string>
+    <string name="app_name">HKHC Inventory</string>
 
     <string name="scan_barcode_button">Scan</string>
     <string name="submit_button">Submit</string>
@@ -8,7 +8,8 @@
     <string name="connection_error">Connection Error</string>
 
     <!-- Strings related to barcode scanner -->
-    <string name="ok">OK</string>
+    <string name="ok">確認</string>
+    <string name="cancel">取消</string>
     <string name="permission_camera_rationale">Access to the camera is needed for detection</string>
     <string name="no_camera_permission">This application cannot run because it does not have the camera permission.  The application will now exit.</string>
     <string name="low_storage_error">Face detector dependencies cannot be downloaded due to low device storage</string>

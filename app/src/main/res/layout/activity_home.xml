@@ -13,7 +13,7 @@
         android:layout_alignParentTop="true"
         android:adjustViewBounds="true"
         android:scaleType="fitXY"
-        app:srcCompat="@drawable/home_1" />
+        app:srcCompat="@drawable/home_1_1" />
 
     <ImageView
         android:id="@+id/img_title"
@@ -93,7 +93,7 @@
             android:layout_alignStart="@+id/txt_code"
             android:layout_marginBottom="2dp"
             android:layout_marginTop="10dp"
-            android:text="產品編號或名稱：" />
+            android:text="GTIN編號：" />
 
         <Button
             android:id="@+id/btn_serach"
