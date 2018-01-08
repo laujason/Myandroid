@@ -10,7 +10,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
+
 
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.vision.barcode.Barcode;
@@ -37,6 +37,7 @@ public class home extends AppCompatActivity {
     private Button btn_search;
     private Button btn_scan;
     private Button btn_logout;
+    private Button btn_hist;
     private Button btn_add;
     private Button btn_sbtr;
     private String code;
@@ -75,6 +76,7 @@ public class home extends AppCompatActivity {
         txt_code = findViewById(R.id.txt_code);
         btn_scan = findViewById(R.id.btn_scan);
         btn_logout = findViewById(R.id.btn_logout);
+        btn_hist = findViewById(R.id.btn_hist);
         btn_search = findViewById(R.id.btn_serach);
         btn_add = findViewById(R.id.btn_add);
         btn_sbtr = findViewById(R.id.btn_sbtr);
@@ -106,6 +108,16 @@ public class home extends AppCompatActivity {
                 }
             }
         });
+
+        btn_hist.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), history.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
 
         btn_logout.setOnClickListener(new View.OnClickListener() {
             @Override

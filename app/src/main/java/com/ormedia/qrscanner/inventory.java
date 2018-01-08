@@ -10,7 +10,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -24,7 +23,6 @@ import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
-import java.util.EventObject;
 
 
 /**
@@ -69,8 +67,8 @@ public class inventory extends AppCompatActivity {
         txt_pdqty = findViewById(R.id.txt_pdqty);
         txt_sup = findViewById(R.id.txt_sup);
         txt_remark = findViewById(R.id.txt_remark);
-        img_title = findViewById(R.id.img_title);
         txt_actqyt =findViewById(R.id.txt_actqty);
+        img_title = findViewById(R.id.img_title);
         btn_confirm = findViewById(R.id.btn_confirm);
         btn_cancel = findViewById(R.id.btn_cancel);
         activity = this;

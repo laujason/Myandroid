@@ -5,7 +5,7 @@
     <string name="submit_button">Submit</string>
     <string name="no_barcode_captured">No barcode captured</string>
     <string name="barcode_error_format">"Error reading barcode: %1$s"</string>
-    <string name="connection_error">Connection Error</string>
+    <string name="connection_error">Get Item Failed</string>
 
     <!-- Strings related to barcode scanner -->
     <string name="ok">確認</string>

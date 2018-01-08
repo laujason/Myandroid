@@ -13,7 +13,7 @@
         android:layout_alignParentTop="true"
         android:adjustViewBounds="true"
         android:scaleType="fitXY"
-        app:srcCompat="@drawable/home_1_1" />
+        app:srcCompat="@drawable/home_1" />
 
     <ImageView
         android:id="@+id/img_title"
@@ -234,6 +234,14 @@
         android:layout_width="100dp"
         android:layout_height="35dp"
         android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:alpha="0" />
+
+    <Button
+        android:id="@+id/btn_hist"
+        android:layout_width="100dp"
+        android:layout_height="35dp"
+        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:alpha="0" />
 
