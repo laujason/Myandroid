@@ -45,6 +45,8 @@ public class login extends AppCompatActivity {
         cb_read =  findViewById(R.id.cb_read);
         cb_read.setChecked(debug);
 
+
+
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -72,6 +74,18 @@ public class login extends AppCompatActivity {
         //Toast.makeText(getApplicationContext(), "cannot go back", Toast.LENGTH_SHORT).show();
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (debug){
+            Intent intent = new Intent(getApplicationContext(), home.class);
+            String message = "7";
+            intent.putExtra(msg_userid, message);
+            startActivity(intent);
+            finish();
+        }
+    }
+
     public void applogin(String str_phone, String str_psw) {
         Log.d("ORM","phone = " + str_phone);
         Log.d("ORM","psw = " + str_psw);
@@ -94,8 +108,7 @@ public class login extends AppCompatActivity {
                     if (str_error =="false" || debug){
                         txt_error.setVisibility(View.INVISIBLE);
                         Intent intent = new Intent(getApplicationContext(), home.class);
-                        String message = str_userid;
-                        intent.putExtra(msg_userid, message);
+                        intent.putExtra(msg_userid, str_userid);
                         startActivity(intent);
                         finish();
 

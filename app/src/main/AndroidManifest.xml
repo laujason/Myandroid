@@ -64,7 +64,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".home" />
         </activity>
-
+        <activity android:name=".history"
+            android:parentActivityName=".home"
+            android:windowSoftInputMode="stateHidden">
+            <!-- The meta-data tag is required if you support API level 15 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".home" />
+        </activity>
         <activity
             android:name=".barcode.BarcodeCaptureActivity">
         </activity>

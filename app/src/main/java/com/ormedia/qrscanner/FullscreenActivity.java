@@ -385,11 +385,12 @@ public class FullscreenActivity extends AppCompatActivity {
         popup.show();//showing popup menu
     }
 
-    public void downLoadFromServer(String GTIN){
+    public void downLoadFromServer(final String GTIN){
         new JSONResponse(this, "http://35.198.210.107/scan?action=scan&code="+ encode(GTIN), new JSONResponse.onComplete() {
             @Override
             public void onComplete(JSONObject json) {
                 Log.d("ORM",json.toString());
+                Log.d("ORM","http://35.198.210.107/scan?action=scan&code="+ encode(GTIN));
                 try {
                     String GTIN = json.getString("code");
                     String productName = json.getString("productName");

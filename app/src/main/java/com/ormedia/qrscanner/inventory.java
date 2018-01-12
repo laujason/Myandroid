@@ -7,12 +7,14 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,10 +40,20 @@ public class inventory extends AppCompatActivity {
     private TextView txt_sup;
     private TextView txt_actqyt;
     private TextView txt_remark;
+    private TextView txt_exp;
+    private TextView txt_lot;
+    private TextView txt_inv;
+    private TextView txt_ttp;
     private Button btn_confirm;
     private Button btn_cancel;
     private String code;
     private String method;
+    private String oricode;
+    private String exp;
+    private String lot;
+    private String inv;
+    private String ttp;
+    private String userid;
     private Double unitprice;
     private Integer actqty = 0;
     private ImageView img_title;
@@ -50,6 +62,8 @@ public class inventory extends AppCompatActivity {
     private Activity activity;
     public static final String msg_code = "com.ormedia.qrscanner.code";
     public static final String msg_method = "com.ormedia.qrscanner.method";
+    public static final String msg_oricode = "com.ormedia.qrscanner.oricode";
+    public static final String msg_userid = "com.ormedia.qrscanner.userid";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,31 +71,43 @@ public class inventory extends AppCompatActivity {
         setContentView(R.layout.activity_inventory);
 
         final Intent intent = getIntent();
-        code = intent.getStringExtra(home.msg_code).toString();
-        method = intent.getStringExtra(home.msg_method).toString();
-        Log.d("ORM","method= " + method);
+
+        try {
+            code = intent.getStringExtra(home.msg_code).toString();
+            method = intent.getStringExtra(home.msg_method).toString();
+            userid = intent.getStringExtra(login.msg_userid);
+            oricode = intent.getStringExtra(home.msg_oricode).toString();
+        } catch (Exception e){
+            oricode = code;
+        }
 
         txt_pdname = findViewById(R.id.txt_pdname);
         txt_pdcode = findViewById(R.id.txt_pdcode);
         txt_pdgtin = findViewById(R.id.txt_pdgtin);
         txt_pdqty = findViewById(R.id.txt_pdqty);
         txt_sup = findViewById(R.id.txt_sup);
+        txt_exp = findViewById(R.id.txt_exp);
+        txt_lot = findViewById(R.id.txt_lot);
+        txt_inv = findViewById(R.id.txt_inv);
+        txt_ttp = findViewById(R.id.txt_ttp);
         txt_remark = findViewById(R.id.txt_remark);
         txt_actqyt =findViewById(R.id.txt_actqty);
         img_title = findViewById(R.id.img_title);
         btn_confirm = findViewById(R.id.btn_confirm);
         btn_cancel = findViewById(R.id.btn_cancel);
+        RelativeLayout rl_gift = findViewById(R.id.rl_gift);
         activity = this;
         //actqty = 0;
 
-        downLoadFromServer(code);
-        btn_confirm.setEnabled(false);
+        downLoadFromServer(oricode);
         if (method.equals("out".toString()) ){
             img_title.setImageResource(R.drawable.home_out);
             txt_sup.setText("使用量：");
+            rl_gift.setVisibility(View.INVISIBLE);
         } else if (method.equals("in".toString())){
             img_title.setImageResource(R.drawable.home_in);
-            txt_sup.setText("補充量：");
+            txt_sup.setText("購買量：");
+
         }
 
 
@@ -89,7 +115,9 @@ public class inventory extends AppCompatActivity {
         btn_confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                confirmMove();
+                if (checkForm()){
+                    confirmMove();
+                }
             }
         });
 
@@ -101,6 +129,8 @@ public class inventory extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), home.class);
                 intent.putExtra(msg_code, code);
                 intent.putExtra(msg_method, "cancel");
+                intent.putExtra(msg_oricode, oricode);
+                intent.putExtra(msg_userid, userid);
                 startActivity(intent);
                 finish();
             }
@@ -117,14 +147,11 @@ public class inventory extends AppCompatActivity {
                     actqty = Integer.parseInt(txt_actqyt.getText().toString());
                 } catch (Exception e) {
                     actqty = 0;
-                    btn_confirm.setEnabled(false);
                 }
                 Log.d("ORM",actqty.toString());
                 if (actqty>0){
-                    btn_confirm.setEnabled(true);
                 } else {
                     actqty = 0;
-                    btn_confirm.setEnabled(false);
                 }
             }
 
@@ -132,6 +159,21 @@ public class inventory extends AppCompatActivity {
             public void afterTextChanged(Editable editable) {
             }
         });
+    }
+
+    private boolean checkForm() {
+        boolean cansubmit;
+        cansubmit = !(TextUtils.isEmpty(txt_actqyt.getText()) ||
+                    TextUtils.isEmpty(txt_exp.getText()) ||
+                    TextUtils.isEmpty(txt_lot.getText()) ||
+                    TextUtils.isEmpty(txt_inv.getText()) ||
+                    TextUtils.isEmpty(txt_ttp.getText()));
+        Log.d("ORM",Boolean.toString(cansubmit));
+        if (!cansubmit){
+            Toast.makeText(getApplicationContext(), "請填入所有項", Toast.LENGTH_SHORT).show();
+        }
+
+        return cansubmit    ;
     }
 
     public void confirmMove(){
@@ -163,8 +205,20 @@ public class inventory extends AppCompatActivity {
                     String productName = json.getString("productName");
                     String supplier = json.getString("supplierName");
                     String quantity = json.getString("quantity");
-                    String price = json.getString("price");
+                    //String price = json.getString("price");
+                    String lot = json.getString("lot");
+                    String exp = json.getString("exp");
                     String productID = json.getString("postid");
+                    try{
+                         exp = json.getString("exp");
+                    } catch (Exception e){
+                         exp = "";
+                    }
+                    try{
+                        lot = json.getString("lot");
+                    } catch (Exception e){
+                        lot = "";
+                    }
                     postid = productID;
                     while ((productID.length()<5)){
                         productID="0"+productID;
@@ -172,11 +226,13 @@ public class inventory extends AppCompatActivity {
                     productName = supplier +  "\n" + productName ;
                     txt_pdname.setText(productName);
                     txt_pdgtin.setText(GTIN);
+                    txt_lot.setText(lot);
+                    txt_exp.setText(exp);
                     code = GTIN;
-                    txt_pdqty.setText(quantity);
+                    //txt_pdqty.setText(quantity);
                     txt_pdcode.setText(productID);
                     try {
-                        unitprice = Double.parseDouble(price);
+                        //unitprice = Double.parseDouble(price);
                     } catch (Exception e) {
                         Toast.makeText(getApplicationContext(), "error getting price", Toast.LENGTH_SHORT).show();
                     }
@@ -213,12 +269,12 @@ public class inventory extends AppCompatActivity {
     }
 
     public void inventory(){
-        new JSONResponse(this, "http://35.198.210.107/moveinv?method="+ method + "&postid=" + postid + "&quantity=" + actqty + "&remark=" + txt_remark.getText().toString(), new JSONResponse.onComplete() {
+        new JSONResponse(this, inv_url(), new JSONResponse.onComplete() {
             @Override
             public void onComplete(JSONObject json) {
                 Log.d("ORM",json.toString());
                 try {
-                    String quantity = json.getString("quantity");
+                    //String quantity = json.getString("quantity");
                     String error = json.getString("error");
                     String method = json.getString("method");
                     if (error=="false"){
@@ -230,6 +286,8 @@ public class inventory extends AppCompatActivity {
                     Intent intent = new Intent(getApplicationContext(), home.class);
                     intent.putExtra(msg_code, code);
                     intent.putExtra(msg_method, method);
+                    intent.putExtra(msg_oricode, oricode);
+                    intent.putExtra(msg_userid, userid);
                     startActivity(intent);
                     finish();
                 } catch(Exception e) {
@@ -238,6 +296,24 @@ public class inventory extends AppCompatActivity {
             }
         });
     }
+
+    public String inv_url(){
+        exp = txt_exp.getText().toString();
+        lot = txt_lot.getText().toString();
+        inv = txt_inv.getText().toString();
+        ttp = txt_ttp.getText().toString();
+        String remark = txt_remark.getText().toString();
+        String url = "http://35.198.210.107/inventory?method=" + method +
+                "&postid=" + postid + "&quantity=" + actqty +
+                "&remark=" + remark +
+                "&exp=" + exp + "&lot=" + lot +
+                "&inv=" + inv + "&ttp=" + ttp +
+                "&userid=" + userid;
+        Log.d("ORM",url);
+        return (url);
+    }
+
+
 
 
 }

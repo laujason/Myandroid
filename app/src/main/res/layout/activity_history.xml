@@ -1,5 +1,108 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <Button
+        android:id="@+id/btn_back"
+        android:layout_width="70dp"
+        android:layout_height="32dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:alpha="0"
+        android:text="Button" />
+
+    <ImageView
+        android:id="@+id/img_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/img_header"
+        android:adjustViewBounds="true"
+        android:scaleType="fitXY"
+        app:srcCompat="@drawable/history" />
+
+    <ImageView
+        android:id="@+id/img_header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:adjustViewBounds="true"
+        android:scaleType="fitXY"
+        app:srcCompat="@drawable/home_1_2" />
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/img_title"
+        android:background="@color/colorWhite">
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/img_title">
+
+        <RelativeLayout
+            android:id="@+id/relativeLayout"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:background="#f2f2f2"
+            android:paddingBottom="3dp">
+
+            <Button
+                android:id="@+id/imageView"
+                android:layout_width="110dp"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:background="@drawable/button_lo"
+                android:text="補貨記錄"
+                android:textAlignment="center"
+                android:textColor="#006966" />
+
+            <Button
+                android:id="@+id/imageView2"
+                android:layout_width="110dp"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toStartOf="@+id/imageView"
+                android:background="@drawable/button_hi"
+                android:text="所有記錄"
+                android:textAlignment="center"
+                android:textColor="#006966" />
+
+            <Button
+                android:id="@+id/imageView5"
+                android:layout_width="110dp"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@+id/imageView"
+                android:background="@drawable/button_lo"
+                android:text="使用記錄"
+                android:textAlignment="center"
+                android:textColor="#006966" />
+
+            <ListView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </RelativeLayout>
+
+        <ListView
+            android:id="@+id/listView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/relativeLayout" />
+
+    </RelativeLayout>
 
 </RelativeLayout>

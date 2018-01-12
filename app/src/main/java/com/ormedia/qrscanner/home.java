@@ -41,11 +41,16 @@ public class home extends AppCompatActivity {
     private Button btn_add;
     private Button btn_sbtr;
     private String code;
+    private String oricode = "";
     private String method;
+    private String userid;
     private static final String LOG_TAG = FullscreenActivity.class.getSimpleName();
     private static final int BARCODE_READER_REQUEST_CODE = 1;
     public static final String msg_method = "com.ormedia.qrscanner.method";
     public static final String msg_code = "com.ormedia.qrscanner.code";
+    public static final String msg_oricode = "com.ormedia.qrscanner.oricode";
+    public static final String msg_userid = "com.ormedia.qrscanner.userid";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,9 +58,10 @@ public class home extends AppCompatActivity {
         setContentView(R.layout.activity_home);
 
         Intent intent = getIntent();
-        String msg_userid = intent.getStringExtra(login.msg_userid);
-        try {
 
+        try {
+            userid = intent.getStringExtra(login.msg_userid);
+            oricode = intent.getStringExtra(home.msg_oricode);
             code = intent.getStringExtra(home.msg_code);
             method = intent.getStringExtra(home.msg_method);
             Log.d("ORM","method= " + method);
@@ -63,7 +69,7 @@ public class home extends AppCompatActivity {
                 downLoadFromServer(code);
             }
         } catch (Exception e){
-
+            oricode = "";
         }
 
         //TextView textView = findViewById(R.id.textView4);
@@ -114,7 +120,6 @@ public class home extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), history.class);
                 startActivity(intent);
-                finish();
             }
         });
 
@@ -132,10 +137,7 @@ public class home extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (productex()){
-                    Intent intent = new Intent(getApplicationContext(), inventory.class);
-                    intent.putExtra(msg_code, code);
-                    intent.putExtra(msg_method, "in");
-                    startActivity(intent);
+                    goinv("in");
                 }
 
             }
@@ -145,10 +147,7 @@ public class home extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (productex()) {
-                    Intent intent = new Intent(getApplicationContext(), inventory.class);
-                    intent.putExtra(msg_code, code);
-                    intent.putExtra(msg_method, "out");
-                    startActivity(intent);
+                    goinv("out");
                 }
             }
         });
@@ -173,16 +172,17 @@ public class home extends AppCompatActivity {
     }
 
 
-    public void downLoadFromServer(String GTIN){
+    public void downLoadFromServer(final String GTIN){
         new JSONResponse(this, "http://35.198.210.107/scan?action=scan&code="+ encode(GTIN), new JSONResponse.onComplete() {
             @Override
             public void onComplete(JSONObject json) {
                 Log.d("ORM",json.toString());
+                Log.d("ORM","http://35.198.210.107/scan?action=scan&code="+ encode(GTIN));
                 try {
                     String GTIN = json.getString("code");
                     String productName = json.getString("productName");
                     String supplier = json.getString("supplierName");
-                    String quantity = json.getString("quantity");
+                    //String quantity = json.getString("quantity");
                     String productID = json.getString("postid");
                     while ((productID.length()<5)){
                         productID="0"+productID;
@@ -192,7 +192,7 @@ public class home extends AppCompatActivity {
                     txt_pdcode.setText(productID);
                     txt_pdgtin.setText(GTIN);
                     code = GTIN;
-                    txt_pdqty.setText(quantity);
+                    //txt_pdqty.setText(quantity);
                     //Toast.makeText(getApplicationContext(), "1234 aquired", Toast.LENGTH_SHORT).show();
                 } catch(Exception e) {
                     Log.e("ORM","FullScreenActivity onActivity Result : "+e.toString());
@@ -212,6 +212,7 @@ public class home extends AppCompatActivity {
                     Barcode barcode = data.getParcelableExtra(BarcodeCaptureActivity.BarcodeObject);
                     Point[] p = barcode.cornerPoints;
                     GTIN = barcode.displayValue;
+                    oricode = GTIN;
                         //txt_pdgtin.setText(longCode);
                         downLoadFromServer(GTIN);
                 } else txt_pdgtin.setText(R.string.no_barcode_captured);
@@ -249,7 +250,19 @@ public class home extends AppCompatActivity {
         } else {
             return false;
         }
+    }
 
+    private void goinv (String method){
+        Intent intent = new Intent(getApplicationContext(), inventory.class);
+        intent.putExtra(msg_code, code);
+        intent.putExtra(msg_method, method);
+        intent.putExtra(msg_userid, userid);
+
+        if (oricode ==""){
+            oricode = code;
+        }
+        intent.putExtra(msg_oricode, oricode);
+        startActivity(intent);
     }
 
 
