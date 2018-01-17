@@ -141,7 +141,7 @@
 
                     <TextView
                         android:id="@+id/textView8"
-                        android:layout_width="wrap_content"
+                        android:layout_width="80dp"
                         android:layout_height="wrap_content"
                         android:layout_alignParentStart="true"
                         android:layout_alignParentTop="true"
@@ -155,56 +155,106 @@
                         android:layout_alignParentTop="true"
                         android:layout_toEndOf="@+id/textView8"
                         android:lines="4" />
+                </RelativeLayout>
 
-                    <TextView
-                        android:id="@+id/textView11"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:layout_below="@+id/txt_pdname"
-                        android:paddingBottom="5dp"
-                        android:text="產品編號：" />
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
                     <TextView
                         android:id="@+id/txt_pdcode"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_alignBaseline="@+id/textView11"
-                        android:layout_alignBottom="@+id/textView11"
-                        android:layout_toEndOf="@+id/textView11"
-                        android:paddingBottom="5dp" />
+                        android:layout_toEndOf="@+id/textView11" />
 
                     <TextView
-                        android:id="@+id/textView14"
-                        android:layout_width="wrap_content"
+                        android:id="@+id/textView11"
+                        android:layout_width="80dp"
                         android:layout_height="wrap_content"
                         android:layout_alignParentStart="true"
-                        android:layout_below="@+id/textView11"
-                        android:layout_marginBottom="5dp"
-                        android:text="GTIN：" />
+                        android:paddingBottom="5dp"
+                        android:text="產品編號：" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
                     <TextView
                         android:id="@+id/txt_pdgtin"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_alignStart="@+id/txt_pdcode"
-                        android:layout_below="@+id/txt_pdcode"
-                        android:layout_marginBottom="5dp" />
+                        android:layout_alignParentTop="true"
+                        android:layout_toEndOf="@+id/textView14" />
 
                     <TextView
-                        android:id="@+id/textView16"
-                        android:layout_width="wrap_content"
+                        android:id="@+id/textView14"
+                        android:layout_width="80dp"
                         android:layout_height="wrap_content"
                         android:layout_alignParentStart="true"
-                        android:layout_below="@+id/textView14"
-                        android:text="存量：" />
+                        android:layout_marginBottom="5dp"
+                        android:text="GTIN：" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/txt_lot"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_toEndOf="@+id/textView5" />
+
+                    <TextView
+                        android:id="@+id/textView5"
+                        android:layout_width="80dp"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginBottom="5dp"
+                        android:text="批次號：" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/txt_exp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_toEndOf="@+id/textView7" />
+
+                    <TextView
+                        android:id="@+id/textView7"
+                        android:layout_width="80dp"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginBottom="5dp"
+                        android:text="到期日：" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
                     <TextView
                         android:id="@+id/txt_pdqty"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_alignStart="@+id/txt_pdgtin"
-                        android:layout_below="@+id/textView14" />
+                        android:layout_alignParentTop="true"
+                        android:layout_toEndOf="@+id/textView16" />
+
+                    <TextView
+                        android:id="@+id/textView16"
+                        android:layout_width="80dp"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:paddingBottom="5dp"
+                        android:text="存量：" />
 
                 </RelativeLayout>
 

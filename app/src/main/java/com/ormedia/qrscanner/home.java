@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.google.android.gms.common.api.CommonStatusCodes;
@@ -34,6 +35,8 @@ public class home extends AppCompatActivity {
     private TextView txt_pdgtin;
     private TextView txt_pdqty;
     private TextView txt_code;
+    private TextView txt_exp;
+    private TextView txt_lot;
     private Button btn_search;
     private Button btn_scan;
     private Button btn_logout;
@@ -44,6 +47,8 @@ public class home extends AppCompatActivity {
     private String oricode = "";
     private String method;
     private String userid;
+    private String exp;
+    private String lot;
     private static final String LOG_TAG = FullscreenActivity.class.getSimpleName();
     private static final int BARCODE_READER_REQUEST_CODE = 1;
     public static final String msg_method = "com.ormedia.qrscanner.method";
@@ -65,7 +70,9 @@ public class home extends AppCompatActivity {
             code = intent.getStringExtra(home.msg_code);
             method = intent.getStringExtra(home.msg_method);
             Log.d("ORM","method= " + method);
-            if (code!=""){
+            if (oricode!=""){
+                downLoadFromServer(oricode);
+            } else if (code!=""){
                 downLoadFromServer(code);
             }
         } catch (Exception e){
@@ -80,6 +87,8 @@ public class home extends AppCompatActivity {
         txt_pdgtin = findViewById(R.id.txt_pdgtin);
         txt_pdqty = findViewById(R.id.txt_pdqty);
         txt_code = findViewById(R.id.txt_code);
+        txt_exp = findViewById(R.id.txt_exp);
+        txt_lot = findViewById(R.id.txt_lot);
         btn_scan = findViewById(R.id.btn_scan);
         btn_logout = findViewById(R.id.btn_logout);
         btn_hist = findViewById(R.id.btn_hist);
@@ -138,6 +147,8 @@ public class home extends AppCompatActivity {
             public void onClick(View view) {
                 if (productex()){
                     goinv("in");
+                } else {
+                    Toast.makeText(getApplicationContext(),"請先掃描產品", Toast.LENGTH_LONG).show();
                 }
 
             }
@@ -148,6 +159,8 @@ public class home extends AppCompatActivity {
             public void onClick(View view) {
                 if (productex()) {
                     goinv("out");
+                } else {
+                    Toast.makeText(getApplicationContext(),"請先掃描產品", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -182,8 +195,10 @@ public class home extends AppCompatActivity {
                     String GTIN = json.getString("code");
                     String productName = json.getString("productName");
                     String supplier = json.getString("supplierName");
-                    //String quantity = json.getString("quantity");
+                    String quantity = json.getString("quantity");
                     String productID = json.getString("postid");
+                    String lot = json.getString("lot");
+                    String exp = json.getString("exp");
                     while ((productID.length()<5)){
                         productID="0"+productID;
                     }
@@ -191,6 +206,9 @@ public class home extends AppCompatActivity {
                     txt_pdname.setText(productName);
                     txt_pdcode.setText(productID);
                     txt_pdgtin.setText(GTIN);
+                    txt_pdqty.setText(quantity);
+                    txt_lot.setText(lot);
+                    txt_exp.setText(exp);
                     code = GTIN;
                     //txt_pdqty.setText(quantity);
                     //Toast.makeText(getApplicationContext(), "1234 aquired", Toast.LENGTH_SHORT).show();

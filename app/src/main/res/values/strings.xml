@@ -14,4 +14,12 @@
     <string name="no_camera_permission">This application cannot run because it does not have the camera permission.  The application will now exit.</string>
     <string name="low_storage_error">Face detector dependencies cannot be downloaded due to low device storage</string>
     <string name="background_img">background_img</string>
+    <string-array name="consume_reason">
+        <item>使用</item>
+        <item>過期</item>
+        <item>損壞</item>
+        <item>丟棄</item>
+        <item>其他：請填寫備註</item>
+    </string-array>
+
 </resources>

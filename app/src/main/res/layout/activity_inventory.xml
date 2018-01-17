@@ -239,11 +239,9 @@
                             android:layout_toEndOf="@+id/txt_actqty">
 
                             <EditText
-                                android:id="@+id/txt_actqty2"
+                                android:id="@+id/txt_gift"
                                 android:layout_width="match_parent"
                                 android:layout_height="40dp"
-                                android:layout_alignBaseline="@+id/txt_actqty"
-                                android:layout_alignBottom="@+id/txt_actqty"
                                 android:layout_toEndOf="@+id/txt_sup2"
                                 android:ems="10"
                                 android:inputType="number"
@@ -254,7 +252,6 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_centerVertical="true"
-                                android:layout_toEndOf="@+id/txt_actqty"
                                 android:text="贈送量：" />
                         </RelativeLayout>
 
@@ -298,7 +295,7 @@
                             android:textSize="14sp" />
 
                         <TextView
-                            android:id="@+id/txt_1"
+                            android:id="@+id/txt_unp"
                             android:layout_width="120dp"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
@@ -315,6 +312,7 @@
                     </RelativeLayout>
 
                     <RelativeLayout
+                        android:id="@+id/rl_inv"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
@@ -339,6 +337,7 @@
                     </RelativeLayout>
 
                     <RelativeLayout
+                        android:id="@+id/rl_reason"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
@@ -347,12 +346,13 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentStart="true"
-                            android:layout_marginBottom="5dp"
+                            android:layout_marginBottom="10dp"
+                            android:layout_marginTop="5dp"
                             android:text="消耗原因：" />
 
                         <Spinner
                             android:id="@+id/spinner"
-                            android:layout_width="match_parent"
+                            android:layout_width="200dp"
                             android:layout_height="wrap_content"
                             android:layout_alignParentTop="true"
                             android:layout_toEndOf="@+id/textView41" />

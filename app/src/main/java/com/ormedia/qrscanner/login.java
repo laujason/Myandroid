@@ -20,6 +20,7 @@ import org.json.JSONObject;
 
 public class login extends AppCompatActivity {
     public static final String msg_userid = "com.ormedia.qrscanner.userid";
+    public static final String msg_isadmin = "com.ormedia.qrscanner.isadmin";
     private TextView txt_phone;
     private TextView txt_psw;
     private TextView txt_disclaimer;
