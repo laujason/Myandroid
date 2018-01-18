@@ -43,18 +43,14 @@ public class home extends AppCompatActivity {
     private Button btn_hist;
     private Button btn_add;
     private Button btn_sbtr;
-    private String code;
-    private String oricode = "";
-    private String method;
-    private String userid;
-    private String exp;
-    private String lot;
+    private Button btn_new;
+    public static String code;
+    public static String oricode="";
+    public static String method="";
+    private int userid;
     private static final String LOG_TAG = FullscreenActivity.class.getSimpleName();
     private static final int BARCODE_READER_REQUEST_CODE = 1;
-    public static final String msg_method = "com.ormedia.qrscanner.method";
-    public static final String msg_code = "com.ormedia.qrscanner.code";
-    public static final String msg_oricode = "com.ormedia.qrscanner.oricode";
-    public static final String msg_userid = "com.ormedia.qrscanner.userid";
+
 
 
     @Override
@@ -62,13 +58,10 @@ public class home extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        Intent intent = getIntent();
-
         try {
-            userid = intent.getStringExtra(login.msg_userid);
-            oricode = intent.getStringExtra(home.msg_oricode);
-            code = intent.getStringExtra(home.msg_code);
-            method = intent.getStringExtra(home.msg_method);
+            userid = login.userid;
+            Log.d("ORM","userid= " + userid);
+
             Log.d("ORM","method= " + method);
             if (oricode!=""){
                 downLoadFromServer(oricode);
@@ -76,7 +69,7 @@ public class home extends AppCompatActivity {
                 downLoadFromServer(code);
             }
         } catch (Exception e){
-            oricode = "";
+
         }
 
         //TextView textView = findViewById(R.id.textView4);
@@ -95,7 +88,12 @@ public class home extends AppCompatActivity {
         btn_search = findViewById(R.id.btn_serach);
         btn_add = findViewById(R.id.btn_add);
         btn_sbtr = findViewById(R.id.btn_sbtr);
+        btn_new = findViewById(R.id.btn_new);
         btn_scan.requestFocus();
+
+        if (!login.isadmin){
+            btn_new.setVisibility(View.INVISIBLE);
+        }
 
         btn_scan.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -165,6 +163,15 @@ public class home extends AppCompatActivity {
             }
         });
 
+        btn_new.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), BarcodeCaptureActivity.class);
+                startActivityForResult(intent, BARCODE_READER_REQUEST_CODE);
+                method  = "pre";
+            }
+        });
+
     }
 
     @Override
@@ -199,21 +206,39 @@ public class home extends AppCompatActivity {
                     String productID = json.getString("postid");
                     String lot = json.getString("lot");
                     String exp = json.getString("exp");
-                    while ((productID.length()<5)){
-                        productID="0"+productID;
+
+
+                    if (method.equals("pre".toString())){
+                        method = "new";
+                        if (login.isadmin){
+                            Intent intent = new Intent(getApplicationContext(), newpd.class);
+                            startActivity(intent);
+                        }
                     }
-                    productName = supplier +  "\n" + productName ;
-                    txt_pdname.setText(productName);
-                    txt_pdcode.setText(productID);
-                    txt_pdgtin.setText(GTIN);
-                    txt_pdqty.setText(quantity);
-                    txt_lot.setText(lot);
-                    txt_exp.setText(exp);
-                    code = GTIN;
+
+                    if (!productName.equals("".toString())) {
+                        while ((productID.length()<5)){
+                            productID="0"+productID;
+                        }
+                        productName = supplier + "\n" + productName;
+                        txt_pdname.setText(productName);
+                        txt_pdcode.setText(productID);
+                        txt_pdgtin.setText(GTIN);
+                        txt_pdqty.setText(quantity);
+                        txt_lot.setText(lot);
+                        txt_exp.setText(exp);
+                        code = GTIN;
+                    } else {
+                        if (!method.equals("new".toString())) {
+                            Toast.makeText(getApplicationContext(), "物品不存在", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
                     //txt_pdqty.setText(quantity);
                     //Toast.makeText(getApplicationContext(), "1234 aquired", Toast.LENGTH_SHORT).show();
                 } catch(Exception e) {
                     Log.e("ORM","FullScreenActivity onActivity Result : "+e.toString());
+
                 }
             }
         });
@@ -231,8 +256,7 @@ public class home extends AppCompatActivity {
                     Point[] p = barcode.cornerPoints;
                     GTIN = barcode.displayValue;
                     oricode = GTIN;
-                        //txt_pdgtin.setText(longCode);
-                        downLoadFromServer(GTIN);
+                    downLoadFromServer(GTIN);
                 } else txt_pdgtin.setText(R.string.no_barcode_captured);
             } else Log.e(LOG_TAG, String.format(getString(R.string.barcode_error_format),
                     CommonStatusCodes.getStatusCodeString(resultCode)));
@@ -272,14 +296,12 @@ public class home extends AppCompatActivity {
 
     private void goinv (String method){
         Intent intent = new Intent(getApplicationContext(), inventory.class);
-        intent.putExtra(msg_code, code);
-        intent.putExtra(msg_method, method);
-        intent.putExtra(msg_userid, userid);
+        home.method = method;
 
         if (oricode ==""){
             oricode = code;
         }
-        intent.putExtra(msg_oricode, oricode);
+
         startActivity(intent);
     }
 

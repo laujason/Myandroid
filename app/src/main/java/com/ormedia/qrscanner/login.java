@@ -19,8 +19,8 @@ import org.json.JSONObject;
  */
 
 public class login extends AppCompatActivity {
-    public static final String msg_userid = "com.ormedia.qrscanner.userid";
-    public static final String msg_isadmin = "com.ormedia.qrscanner.isadmin";
+    public static int userid = 0;
+    public static Boolean isadmin;
     private TextView txt_phone;
     private TextView txt_psw;
     private TextView txt_disclaimer;
@@ -80,8 +80,9 @@ public class login extends AppCompatActivity {
         super.onStart();
         if (debug){
             Intent intent = new Intent(getApplicationContext(), home.class);
-            String message = "7";
-            intent.putExtra(msg_userid, message);
+            userid = 10;
+            isadmin = true;
+            //intent.putExtra(msg_userid, message);
             startActivity(intent);
             finish();
         }
@@ -96,20 +97,19 @@ public class login extends AppCompatActivity {
             public void onComplete(JSONObject json) {
                 Log.d("ORM", json.toString());
                 try {
-                    String str_userid = json.getString("userid");
-                    Log.d("ORM", str_userid);
-                    if (str_userid =="0"){
-                    }
+                    userid = Integer.parseInt(json.getString("userid"));
                     String str_error = json.getString("error");
+                    String isadmin = json.getString("admin");
+                    if (isadmin.equals("true".toString())){
+                        login.isadmin = true;
+                    }
                     Log.d("ORM", str_error);
                     if (str_error =="true"){
                         Log.d("ORM", "return error");
-                    }
-
-                    if (str_error =="false" || debug){
+                    } else if (str_error =="false" || debug){
                         txt_error.setVisibility(View.INVISIBLE);
                         Intent intent = new Intent(getApplicationContext(), home.class);
-                        intent.putExtra(msg_userid, str_userid);
+                        //intent.putExtra(msg_userid, str_userid);
                         startActivity(intent);
                         finish();
 

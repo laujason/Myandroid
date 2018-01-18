@@ -30,14 +30,12 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 
-import static java.lang.Math.round;
-
 
 /**
  * Created by rin on 5/1/18.
  */
 
-public class inventory extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class newpd extends AppCompatActivity {
 
     private TextView txt_pdname;
     private TextView txt_pdcode;
@@ -83,16 +81,14 @@ public class inventory extends AppCompatActivity implements AdapterView.OnItemSe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_inventory);
+        setContentView(R.layout.activity_new);
 
-
+        method = "new";
         try {
-            method = home.method;
-            code = home.code;
             userid = login.userid;
             oricode = home.oricode;
             if (oricode.equals("".toString())){
-                oricode = code;
+                Toast.makeText(getApplicationContext(),"獲取產品編碼失敗，請手動輸入。",Toast.LENGTH_LONG).show();
             }
         } catch (Exception e){
 
@@ -101,7 +97,6 @@ public class inventory extends AppCompatActivity implements AdapterView.OnItemSe
         txt_pdname = findViewById(R.id.txt_pdname);
         txt_pdcode = findViewById(R.id.txt_pdcode);
         txt_pdgtin = findViewById(R.id.txt_pdgtin);
-        txt_pdqty = findViewById(R.id.txt_pdqty);
         txt_sup = findViewById(R.id.txt_sup);
         txt_exp = findViewById(R.id.txt_exp);
         txt_lot = findViewById(R.id.txt_lot);
@@ -119,35 +114,15 @@ public class inventory extends AppCompatActivity implements AdapterView.OnItemSe
         RelativeLayout rl_inv = findViewById(R.id.rl_inv);
         RelativeLayout rl_reason = findViewById(R.id.rl_reason);
 
-        spinner = findViewById(R.id.spinner);
-        spinner.setOnItemSelectedListener(this);
+
         activity = this;
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.consume_reason, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
+
 
 
 
 
         downLoadFromServer(oricode);
-        if (method.equals("out".toString()) ){
-            img_title.setImageResource(R.drawable.home_out);
-            txt_sup.setText("使用量：");
-            action = "消耗";
-            rl_gift.setVisibility(View.INVISIBLE);
-            rl_price.setLayoutParams(new LinearLayout.LayoutParams(0,0));
-            rl_price.setVisibility(View.INVISIBLE);
-            rl_inv.setLayoutParams(new LinearLayout.LayoutParams(0,0));
-            rl_inv.setVisibility(View.INVISIBLE);
-        } else if (method.equals("in".toString())){
-            img_title.setImageResource(R.drawable.home_in);
-            txt_sup.setText("購買量：");
-            action = "補充";
-            rl_reason.setLayoutParams(new LinearLayout.LayoutParams(0,0));
-            rl_reason.setVisibility(View.INVISIBLE);
 
-        }
 
 
 
@@ -254,7 +229,7 @@ public class inventory extends AppCompatActivity implements AdapterView.OnItemSe
             Toast.makeText(getApplicationContext(), "請填入所有項", Toast.LENGTH_SHORT).show();
         }
 
-        return cansubmit    ;
+        return cansubmit;
     }
 
     public void confirmMove(){
@@ -285,33 +260,24 @@ public class inventory extends AppCompatActivity implements AdapterView.OnItemSe
                 try {
                     String GTIN = json.getString("code");
                     String productName = json.getString("productName");
+                    if (!productName.equals("".toString())){
+                        Toast.makeText(getApplicationContext(),"產品已經存在，繼續修改將覆蓋資料！",Toast.LENGTH_LONG).show();
+                    }
                     String supplier = json.getString("supplierName");
                     String quantity = json.getString("quantity");
                     String lot = json.getString("lot");
                     String exp = json.getString("exp");
                     String productID = json.getString("postid");
-                    try{
-                         exp = json.getString("exp");
-                    } catch (Exception e){
-                         exp = "";
-                    }
-                    try{
-                        lot = json.getString("lot");
-                    } catch (Exception e){
-                        lot = "";
-                    }
                     postid = productID;
                     while ((productID.length()<5)){
                         productID="0"+productID;
                     }
-                    productName = supplier +  "\n" + productName ;
-                    txt_pdname.setText(productName);
                     txt_pdgtin.setText(GTIN);
                     txt_lot.setText(lot);
                     txt_exp.setText(exp);
                     code = GTIN;
-                    txt_pdqty.setText(quantity);
                     txt_pdcode.setText(productID);
+
                 } catch(Exception e) {
                     Log.e("ORM","FullScreenActivity onActivity Result : "+e.toString());
                 }
@@ -390,22 +356,7 @@ public class inventory extends AppCompatActivity implements AdapterView.OnItemSe
         return (url);
     }
 
-    public void onItemSelected(AdapterView<?> parent, View view,
-                               int pos, long id) {
-        reason = "rsn_" + spinner.getSelectedItem().toString() + "cmt_";
-        Log.d("ORM", "reason= " + reason);
-    }
 
-    public void onNothingSelected(AdapterView<?> parent) {
-        reason = "";
-        Log.d("ORM", "reason= " + reason);
-    }
-
-
-    @Override
-    public void onPointerCaptureChanged(boolean hasCapture) {
-
-    }
 
     public void update_unp(){
         try {
