@@ -26,7 +26,7 @@
             android:layout_below="@+id/img_header"
             android:adjustViewBounds="true"
             android:scaleType="fitXY"
-            app:srcCompat="@drawable/home_in" />
+            app:srcCompat="@drawable/home_new" />
 
         <RelativeLayout
             android:id="@+id/relativeLayout2"
@@ -103,77 +103,87 @@
                             android:layout_weight="1"
                             android:text="產品名稱：" />
 
-                        <TextView
+                        <EditText
                             android:id="@+id/txt_pdname"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentEnd="true"
                             android:layout_alignParentTop="true"
+                            android:layout_marginBottom="-5dp"
+                            android:layout_marginTop="-10dp"
                             android:layout_toEndOf="@+id/textView8"
-                            android:layout_weight="1"
-                            android:lines="4" />
+                            android:ems="10"
+                            android:inputType="textMultiLine"
+                            android:lines="2" />
 
                     </RelativeLayout>
 
                     <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent">
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
 
                         <TextView
-                            android:id="@+id/textView11"
+                            android:id="@+id/txt_sup3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginStart="7dp"
+                            android:layout_toEndOf="@+id/txt_supplier"
+                            android:text="編號：" />
+
+                        <EditText
+                            android:id="@+id/txt_suppid"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:layout_toEndOf="@+id/txt_sup3"
+                            android:ems="10"
+                            android:inputType="number"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/txt_supp"
                             android:layout_width="80dp"
                             android:layout_height="wrap_content"
                             android:layout_alignParentStart="true"
-                            android:layout_marginBottom="5dp"
-                            android:text="產品編號：" />
-
-                        <TextView
-                            android:id="@+id/txt_pdcode"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
                             android:layout_alignParentTop="true"
-                            android:layout_toEndOf="@+id/textView11" />
+                            android:layout_marginTop="10dp"
+                            android:text="供應商：" />
+
+                        <AutoCompleteTextView
+                            android:id="@+id/txt_supplier"
+                            android:layout_width="140dp"
+                            android:layout_height="40dp"
+                            android:layout_alignParentTop="true"
+                            android:layout_marginBottom="-5dp"
+                            android:layout_marginTop="1dp"
+                            android:layout_toEndOf="@+id/txt_supp" />
+
                     </RelativeLayout>
 
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
-                        <TextView
+                        <EditText
                             android:id="@+id/txt_pdgtin"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_height="40dp"
                             android:layout_alignParentTop="true"
-                            android:layout_toEndOf="@+id/textView14" />
+                            android:layout_marginBottom="-5dp"
+                            android:layout_marginTop="1dp"
+                            android:layout_toEndOf="@+id/textView14"
+                            android:ems="10"
+                            android:inputType="text"
+                            android:textSize="14sp" />
 
                         <TextView
                             android:id="@+id/textView14"
                             android:layout_width="80dp"
                             android:layout_height="wrap_content"
                             android:layout_alignParentStart="true"
-                            android:layout_marginBottom="5dp"
+                            android:layout_marginTop="10dp"
                             android:text="GTIN：" />
 
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-                        <TextView
-                            android:id="@+id/textView16"
-                            android:layout_width="80dp"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentStart="true"
-                            android:layout_marginBottom="5dp"
-                            android:text="存量：" />
-
-                        <TextView
-                            android:id="@+id/txt_pdqty"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentTop="true"
-                            android:layout_toEndOf="@+id/textView16" />
                     </RelativeLayout>
 
                     <RelativeLayout
@@ -186,6 +196,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="40dp"
                             android:layout_marginBottom="-5dp"
+                            android:layout_marginTop="1dp"
                             android:layout_toEndOf="@+id/txt_3"
                             android:ems="10"
                             android:inputType="text"
@@ -242,13 +253,14 @@
                                 android:id="@+id/txt_gift"
                                 android:layout_width="match_parent"
                                 android:layout_height="40dp"
-                                android:layout_toEndOf="@+id/txt_sup3"
+                                android:layout_alignParentTop="true"
+                                android:layout_toEndOf="@+id/txt_sup2"
                                 android:ems="10"
                                 android:inputType="number"
                                 android:textSize="14sp" />
 
                             <TextView
-                                android:id="@+id/txt_sup3"
+                                android:id="@+id/txt_sup2"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_centerVertical="true"
@@ -334,29 +346,6 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
                             android:text="INV：" />
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        android:id="@+id/rl_reason"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-                        <TextView
-                            android:id="@+id/textView41"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentStart="true"
-                            android:layout_marginBottom="10dp"
-                            android:layout_marginTop="5dp"
-                            android:text="消耗原因：" />
-
-                        <Spinner
-                            android:id="@+id/spinner"
-                            android:layout_width="200dp"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentTop="true"
-                            android:layout_toEndOf="@+id/textView41" />
-
                     </RelativeLayout>
 
                     <RelativeLayout

@@ -7,24 +7,20 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.util.Log;
 import android.widget.Toast;
-
 import com.ormedia.qrscanner.Network.*;
-import com.ormedia.qrscanner.home;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
-//import static android.provider.AlarmClock.EXTRA_MESSAGE;
 
 /**
  * Created by panleung on 20/12/2017.
  */
 
 public class login extends AppCompatActivity {
-    public static final String msg_userid = "com.ormedia.qrscanner.userid";
+    public static int userid = 0;
+    public static Boolean isadmin;
     private TextView txt_phone;
     private TextView txt_psw;
     private TextView txt_disclaimer;
@@ -32,6 +28,7 @@ public class login extends AppCompatActivity {
     private CheckBox checkBox;
     private Button btn_login;
     private boolean debug = true;
+    private CheckBox cb_read;
 
 
     @Override
@@ -46,23 +43,49 @@ public class login extends AppCompatActivity {
         txt_error = findViewById(R.id.txt_error);
         txt_disclaimer = findViewById(R.id.txt_disclaimer);
         btn_login = findViewById(R.id.btn_login);
+        cb_read =  findViewById(R.id.cb_read);
+        cb_read.setChecked(debug);
+
+
 
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                    String str_phone = txt_phone.getText().toString();
-                    Log.d("ORM", str_phone);
+                String str_phone = txt_phone.getText().toString();
+                Log.d("ORM", str_phone);
 
-                    String str_psw = txt_psw.getText().toString();
-                    Log.d("ORM", str_psw);
+                String str_psw = txt_psw.getText().toString();
+                Log.d("ORM", str_psw);
 
+                if (cb_read.isChecked()){
+                    applogin(str_phone, str_psw);
 
-                applogin(str_phone, str_psw);
+                } else{
+                    Toast.makeText(getApplicationContext(), "請先同意免責聲明", Toast.LENGTH_SHORT).show();
+                }
             }
 
         });
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        //Toast.makeText(getApplicationContext(), "cannot go back", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (debug){
+            Intent intent = new Intent(getApplicationContext(), home.class);
+            userid = 10;
+            isadmin = true;
+            //intent.putExtra(msg_userid, message);
+            startActivity(intent);
+            finish();
+        }
     }
 
     public void applogin(String str_phone, String str_psw) {
@@ -74,22 +97,19 @@ public class login extends AppCompatActivity {
             public void onComplete(JSONObject json) {
                 Log.d("ORM", json.toString());
                 try {
-                    String str_userid = json.getString("userid");
-                    Log.d("ORM", str_userid);
-                    if (str_userid =="0"){
-                        Log.d("ORM", "return zero");
-                    }
+                    userid = Integer.parseInt(json.getString("userid"));
                     String str_error = json.getString("error");
+                    String isadmin = json.getString("admin");
+                    if (isadmin.equals("true".toString())){
+                        login.isadmin = true;
+                    }
                     Log.d("ORM", str_error);
                     if (str_error =="true"){
                         Log.d("ORM", "return error");
-                    }
-
-                    if (str_error =="false" || debug){
+                    } else if (str_error =="false" || debug){
                         txt_error.setVisibility(View.INVISIBLE);
                         Intent intent = new Intent(getApplicationContext(), home.class);
-                        String message = str_userid;
-                        intent.putExtra(msg_userid, message);
+                        //intent.putExtra(msg_userid, str_userid);
                         startActivity(intent);
                         finish();
 

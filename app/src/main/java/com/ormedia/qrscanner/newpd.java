@@ -14,6 +14,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -24,20 +25,21 @@ import android.widget.Toast;
 
 import com.ormedia.qrscanner.Network.JSONResponse;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
-
-import static java.lang.Math.round;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 
 /**
  * Created by rin on 5/1/18.
  */
 
-public class inventory extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class newpd extends AppCompatActivity {
 
     private TextView txt_pdname;
     private TextView txt_pdcode;
@@ -52,9 +54,9 @@ public class inventory extends AppCompatActivity implements AdapterView.OnItemSe
     private TextView txt_ttp;
     private TextView txt_unp;
     private TextView txt_gift;
+    private TextView txt_suppid;
     private Button btn_confirm;
     private Button btn_cancel;
-
     private String code;
     private String method;
     private String oricode;
@@ -62,37 +64,41 @@ public class inventory extends AppCompatActivity implements AdapterView.OnItemSe
     private String lot;
     private String inv;
     private int userid;
-    private String reason;
     private String postid;
     private String action;
     private Double ttp;
     private Double unp;
     private Integer actqty = 0;
     private Integer giftqty = 0;
-    private ImageView img_title;
     private AlertDialog dlg_confirm;
-    private Spinner spinner;
     private Activity activity;
+    private AutoCompleteTextView txt_supplier;
     public static final String msg_code = "com.ormedia.qrscanner.code";
     public static final String msg_method = "com.ormedia.qrscanner.method";
     public static final String msg_oricode = "com.ormedia.qrscanner.oricode";
     public static final String msg_userid = "com.ormedia.qrscanner.userid";
 
+    private static String[] suppliers = new String[200];
+    private static String[] custom_id = new String[200];
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_inventory);
+        setContentView(R.layout.activity_new);
 
+        get_supplier();
 
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, suppliers);
+        txt_supplier = (AutoCompleteTextView) findViewById(R.id.txt_supplier);
+        txt_supplier.setAdapter(adapter);
+
+        method = "new";
         try {
-            method = home.method;
-            code = home.code;
             userid = login.userid;
             oricode = home.oricode;
             if (oricode.equals("".toString())){
-                oricode = code;
+                Toast.makeText(getApplicationContext(),"獲取產品編碼失敗，請手動輸入。",Toast.LENGTH_LONG).show();
             }
         } catch (Exception e){
 
@@ -101,7 +107,6 @@ public class inventory extends AppCompatActivity implements AdapterView.OnItemSe
         txt_pdname = findViewById(R.id.txt_pdname);
         txt_pdcode = findViewById(R.id.txt_pdcode);
         txt_pdgtin = findViewById(R.id.txt_pdgtin);
-        txt_pdqty = findViewById(R.id.txt_pdqty);
         txt_sup = findViewById(R.id.txt_sup);
         txt_exp = findViewById(R.id.txt_exp);
         txt_lot = findViewById(R.id.txt_lot);
@@ -109,48 +114,16 @@ public class inventory extends AppCompatActivity implements AdapterView.OnItemSe
         txt_ttp = findViewById(R.id.txt_ttp);
         txt_unp = findViewById(R.id.txt_unp);
         txt_remark = findViewById(R.id.txt_remark);
-        txt_actqyt =findViewById(R.id.txt_actqty);
-        txt_gift =findViewById(R.id.txt_gift);
-        img_title = findViewById(R.id.img_title);
+        txt_actqyt = findViewById(R.id.txt_actqty);
+        txt_gift = findViewById(R.id.txt_gift);
+        txt_suppid = findViewById(R.id.txt_suppid);
         btn_confirm = findViewById(R.id.btn_confirm);
         btn_cancel = findViewById(R.id.btn_cancel);
-        RelativeLayout rl_gift = findViewById(R.id.rl_gift);
-        RelativeLayout rl_price = findViewById(R.id.rl_price);
-        RelativeLayout rl_inv = findViewById(R.id.rl_inv);
-        RelativeLayout rl_reason = findViewById(R.id.rl_reason);
 
-        spinner = findViewById(R.id.spinner);
-        spinner.setOnItemSelectedListener(this);
+
         activity = this;
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.consume_reason, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
-
-
-
 
         downLoadFromServer(oricode);
-        if (method.equals("out".toString()) ){
-            img_title.setImageResource(R.drawable.home_out);
-            txt_sup.setText("使用量：");
-            action = "消耗";
-            rl_gift.setVisibility(View.INVISIBLE);
-            rl_price.setLayoutParams(new LinearLayout.LayoutParams(0,0));
-            rl_price.setVisibility(View.INVISIBLE);
-            rl_inv.setLayoutParams(new LinearLayout.LayoutParams(0,0));
-            rl_inv.setVisibility(View.INVISIBLE);
-        } else if (method.equals("in".toString())){
-            img_title.setImageResource(R.drawable.home_in);
-            txt_sup.setText("購買量：");
-            action = "補充";
-            rl_reason.setLayoutParams(new LinearLayout.LayoutParams(0,0));
-            rl_reason.setVisibility(View.INVISIBLE);
-
-        }
-
-
-
 
         btn_confirm.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -161,8 +134,6 @@ public class inventory extends AppCompatActivity implements AdapterView.OnItemSe
             }
         });
 
-
-
         btn_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -170,6 +141,34 @@ public class inventory extends AppCompatActivity implements AdapterView.OnItemSe
                 home.method = "cancel";
                 startActivity(intent);
                 finish();
+            }
+        });
+
+        txt_supplier.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                try{
+                    String suppliertext = txt_supplier.getText().toString();
+                    if (!suppliertext.equals("".toString())) {
+                        int customid = Arrays.asList(suppliers).indexOf(suppliertext)+1;
+                        if (customid > 0) {
+                            txt_suppid.setText(String.valueOf(customid));
+                        } else {
+                            txt_suppid.setText("");
+                        }
+                    }
+                } catch (Exception e) {
+                    actqty = 0;
+                }
+                update_unp();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
             }
         });
 
@@ -234,9 +233,6 @@ public class inventory extends AppCompatActivity implements AdapterView.OnItemSe
 
             }
         });
-
-
-
     }
 
     private boolean checkForm() {
@@ -245,24 +241,23 @@ public class inventory extends AppCompatActivity implements AdapterView.OnItemSe
         cansubmit = !(TextUtils.isEmpty(txt_actqyt.getText()) ||
                     TextUtils.isEmpty(txt_exp.getText()) ||
                     TextUtils.isEmpty(txt_lot.getText()) ||
-                    //TextUtils.isEmpty(txt_inv.getText())  ||
-                    //TextUtils.isEmpty(txt_ttp.getText()) && method == "out")
-                (method.equals("in".toString()) && TextUtils.isEmpty(txt_inv.getText()))  ||
-                (method.equals("in".toString()) && TextUtils.isEmpty(txt_ttp.getText())));
+                    TextUtils.isEmpty(txt_inv.getText()) ||
+                    TextUtils.isEmpty(txt_ttp.getText()) ||
+                    TextUtils.isEmpty(txt_supplier.getText())
+        );
         Log.d("ORM",Boolean.toString(cansubmit));
         if (!cansubmit){
             Toast.makeText(getApplicationContext(), "請填入所有項", Toast.LENGTH_SHORT).show();
         }
-
-        return cansubmit    ;
+        return cansubmit;
     }
 
     public void confirmMove(){
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         Log.d("ORM", getApplicationContext().toString());
-        builder.setTitle("確認庫存變更");
+        builder.setTitle("確認增加新產品");
         Integer total = actqty + giftqty;
-        builder.setMessage("你確定要"+ action + total.toString()+"件嗎？");
+        builder.setMessage(action + total.toString()+"件嗎？");
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 inventory();
@@ -276,7 +271,6 @@ public class inventory extends AppCompatActivity implements AdapterView.OnItemSe
         dlg_confirm.show();
     }
 
-
     public void downLoadFromServer(String GTIN){
         new JSONResponse(this, "http://35.198.210.107/scan?action=scan&code="+ encode(GTIN), new JSONResponse.onComplete() {
             @Override
@@ -285,35 +279,56 @@ public class inventory extends AppCompatActivity implements AdapterView.OnItemSe
                 try {
                     String GTIN = json.getString("code");
                     String productName = json.getString("productName");
+
+                    if (!productName.equals("".toString())){
+                        action = "你確定要修改產品資料並補充";
+                        Toast.makeText(getApplicationContext(),"產品已經存在，繼續修改將覆蓋資料！",Toast.LENGTH_LONG).show();
+                    } else {
+                        action = "你確定要新增產品並補充";
+                    }
                     String supplier = json.getString("supplierName");
                     String quantity = json.getString("quantity");
                     String lot = json.getString("lot");
                     String exp = json.getString("exp");
                     String productID = json.getString("postid");
-                    try{
-                         exp = json.getString("exp");
-                    } catch (Exception e){
-                         exp = "";
-                    }
-                    try{
-                        lot = json.getString("lot");
-                    } catch (Exception e){
-                        lot = "";
-                    }
                     postid = productID;
                     while ((productID.length()<5)){
                         productID="0"+productID;
                     }
-                    productName = supplier +  "\n" + productName ;
+                    txt_supplier.setText(supplier);
                     txt_pdname.setText(productName);
                     txt_pdgtin.setText(GTIN);
                     txt_lot.setText(lot);
                     txt_exp.setText(exp);
                     code = GTIN;
-                    txt_pdqty.setText(quantity);
                     txt_pdcode.setText(productID);
+
                 } catch(Exception e) {
                     Log.e("ORM","FullScreenActivity onActivity Result : "+e.toString());
+                }
+            }
+        });
+    }
+
+    public void get_supplier(){
+        new JSONResponse(this, "http://35.198.210.107/supplier?action=get", new JSONResponse.onComplete() {
+            @Override
+            public void onComplete(JSONObject json) {
+                Log.d("ORM",json.toString());
+                try {
+                    JSONArray data = json.getJSONArray("sup_list");
+                    ArrayList<String> sup_list = new ArrayList<String>();
+                    for (int i=0; i<200; i++){
+                        suppliers[i] = "";
+                        custom_id[i] = "";
+                    }
+                    for (int i=0;i<data.length();i++){
+                        String data_string = data.getString(i);
+                        String[] sup_array = data_string.split("\"");
+                        suppliers[i] = sup_array[7].toString();
+                        custom_id[i] = sup_array[11].toString();
+                    }
+                } catch (Exception e){
                 }
             }
         });
@@ -353,6 +368,7 @@ public class inventory extends AppCompatActivity implements AdapterView.OnItemSe
                     String method = json.getString("method");
                     home.rexp = json.getString("exp");
                     home.rlot = json.getString("lot");
+
                     if (error=="false"){
                         Toast toast = Toast.makeText(getApplicationContext(), "庫存變更成功", Toast.LENGTH_LONG);
                         toast.setGravity(Gravity.CENTER|Gravity.BOTTOM, 0, 500);
@@ -377,37 +393,24 @@ public class inventory extends AppCompatActivity implements AdapterView.OnItemSe
         exp = txt_exp.getText().toString();
         lot = txt_lot.getText().toString();
         inv = txt_inv.getText().toString();
-        //ttp = txt_ttp.getText().toString();
-        if (method.equals("in".toString())){
-            reason = "";
-        }
-        String remark = txt_remark.getText().toString();
+        String supplierid = txt_suppid.getText().toString();
+        String supplier = txt_supplier.getText().toString();
+        String pdname = encode(txt_pdname.getText().toString());
+        oricode = txt_pdgtin.getText().toString();
+        String remark = encode(txt_remark.getText().toString());
+
         String url = "http://35.198.210.107/inventory?method=" + method +
+                "&code=" + oricode + "&productName=" + pdname +
                 "&postid=" + postid + "&quantity=" + actqty +
-                "&giftqty=" + giftqty +"&remark=" + reason + remark +
-                "&exp=" + exp + "&lot=" + lot +
-                "&inv=" + inv + "&ttp=" + ttp +
+                "&giftqty=" + giftqty +"&remark=" + remark +
+                "&exp=" + exp + "&lot=" + lot + "&supplierName=" + supplier +
+                "&inv=" + inv + "&ttp=" + ttp + "&custom_id=" + supplierid +
                 "&userid=" + userid;
         Log.d("ORM",url);
         return (url);
     }
 
-    public void onItemSelected(AdapterView<?> parent, View view,
-                               int pos, long id) {
-        reason = "rsn_" + spinner.getSelectedItem().toString() + "cmt_";
-        Log.d("ORM", "reason= " + reason);
-    }
 
-    public void onNothingSelected(AdapterView<?> parent) {
-        reason = "";
-        Log.d("ORM", "reason= " + reason);
-    }
-
-
-    @Override
-    public void onPointerCaptureChanged(boolean hasCapture) {
-
-    }
 
     public void update_unp(){
         try {

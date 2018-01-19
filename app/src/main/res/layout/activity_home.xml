@@ -15,22 +15,40 @@
         android:scaleType="fitXY"
         app:srcCompat="@drawable/home_1" />
 
-    <ImageView
-        android:id="@+id/img_title"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:id="@+id/rl_home_2"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/img_header"
-        android:adjustViewBounds="true"
-        android:scaleType="fitXY"
-        app:srcCompat="@drawable/home_2" />
+        android:layout_below="@+id/img_header">
+
+        <Button
+            android:id="@+id/btn_new"
+            android:layout_width="80dp"
+            android:layout_height="30dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="10dp"
+            android:background="@color/colorWhite"
+            android:shadowColor="#007672"
+            android:text="添加新產品"
+            android:textColor="#007672" />
+
+        <ImageView
+            android:id="@+id/img_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:adjustViewBounds="true"
+            android:scaleType="fitXY"
+            app:srcCompat="@drawable/home_2" />
+    </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/relativeLayout2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/img_title"
+        android:layout_below="@+id/rl_home_2"
         android:background="@color/colorWhite">
 
         <ImageView
@@ -93,7 +111,7 @@
             android:layout_alignStart="@+id/txt_code"
             android:layout_marginBottom="2dp"
             android:layout_marginTop="10dp"
-            android:text="產品編號或名稱：" />
+            android:text="GTIN編號：" />
 
         <Button
             android:id="@+id/btn_serach"
@@ -141,7 +159,7 @@
 
                     <TextView
                         android:id="@+id/textView8"
-                        android:layout_width="wrap_content"
+                        android:layout_width="80dp"
                         android:layout_height="wrap_content"
                         android:layout_alignParentStart="true"
                         android:layout_alignParentTop="true"
@@ -155,56 +173,106 @@
                         android:layout_alignParentTop="true"
                         android:layout_toEndOf="@+id/textView8"
                         android:lines="4" />
+                </RelativeLayout>
 
-                    <TextView
-                        android:id="@+id/textView11"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:layout_below="@+id/txt_pdname"
-                        android:paddingBottom="5dp"
-                        android:text="產品編號：" />
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
                     <TextView
                         android:id="@+id/txt_pdcode"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_alignBaseline="@+id/textView11"
-                        android:layout_alignBottom="@+id/textView11"
-                        android:layout_toEndOf="@+id/textView11"
-                        android:paddingBottom="5dp" />
+                        android:layout_toEndOf="@+id/textView11" />
 
                     <TextView
-                        android:id="@+id/textView14"
-                        android:layout_width="wrap_content"
+                        android:id="@+id/textView11"
+                        android:layout_width="80dp"
                         android:layout_height="wrap_content"
                         android:layout_alignParentStart="true"
-                        android:layout_below="@+id/textView11"
-                        android:layout_marginBottom="5dp"
-                        android:text="GTIN：" />
+                        android:paddingBottom="5dp"
+                        android:text="產品編號：" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
                     <TextView
                         android:id="@+id/txt_pdgtin"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_alignStart="@+id/txt_pdcode"
-                        android:layout_below="@+id/txt_pdcode"
-                        android:layout_marginBottom="5dp" />
+                        android:layout_alignParentTop="true"
+                        android:layout_toEndOf="@+id/textView14" />
 
                     <TextView
-                        android:id="@+id/textView16"
-                        android:layout_width="wrap_content"
+                        android:id="@+id/textView14"
+                        android:layout_width="80dp"
                         android:layout_height="wrap_content"
                         android:layout_alignParentStart="true"
-                        android:layout_below="@+id/textView14"
-                        android:text="存量：" />
+                        android:layout_marginBottom="5dp"
+                        android:text="GTIN：" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/txt_lot"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_toEndOf="@+id/textView5" />
+
+                    <TextView
+                        android:id="@+id/textView5"
+                        android:layout_width="80dp"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginBottom="5dp"
+                        android:text="批次號：" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/txt_exp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_toEndOf="@+id/textView7" />
+
+                    <TextView
+                        android:id="@+id/textView7"
+                        android:layout_width="80dp"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginBottom="5dp"
+                        android:text="到期日：" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
                     <TextView
                         android:id="@+id/txt_pdqty"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_alignStart="@+id/txt_pdgtin"
-                        android:layout_below="@+id/textView14" />
+                        android:layout_alignParentTop="true"
+                        android:layout_toEndOf="@+id/textView16" />
+
+                    <TextView
+                        android:id="@+id/textView16"
+                        android:layout_width="80dp"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:paddingBottom="5dp"
+                        android:text="存量：" />
 
                 </RelativeLayout>
 
@@ -227,6 +295,22 @@
         android:layout_height="40dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
+        android:alpha="0" />
+
+    <Button
+        android:id="@+id/btn_logout"
+        android:layout_width="100dp"
+        android:layout_height="35dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:alpha="0" />
+
+    <Button
+        android:id="@+id/btn_hist"
+        android:layout_width="100dp"
+        android:layout_height="35dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
         android:alpha="0" />
 
 </RelativeLayout>
