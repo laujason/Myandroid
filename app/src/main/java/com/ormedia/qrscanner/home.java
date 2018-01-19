@@ -94,7 +94,9 @@ public class home extends AppCompatActivity {
         btn_new = findViewById(R.id.btn_new);
         btn_scan.requestFocus();
         getExp();
-
+        if (!login.isadmin){
+            btn_new.setVisibility(View.INVISIBLE);
+        }
         btn_scan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -321,9 +323,7 @@ public class home extends AppCompatActivity {
         if (!TextUtils.isEmpty(txt_lot.getText())){
             rlot = txt_lot.getText().toString();
         }
-        if (!login.isadmin){
-            btn_new.setVisibility(View.INVISIBLE);
-        }
+
     }
 
 

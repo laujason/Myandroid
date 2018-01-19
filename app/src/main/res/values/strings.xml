@@ -3,9 +3,9 @@
 
     <string name="scan_barcode_button">Scan</string>
     <string name="submit_button">Submit</string>
-    <string name="no_barcode_captured">No barcode captured</string>
+    <string name="no_barcode_captured">沒有掃描到條碼</string>
     <string name="barcode_error_format">"Error reading barcode: %1$s"</string>
-    <string name="connection_error">Get Item Failed</string>
+    <string name="connection_error">獲取產品失敗</string>
 
     <!-- Strings related to barcode scanner -->
     <string name="ok">確認</string>

@@ -27,7 +27,7 @@ public class login extends AppCompatActivity {
     private TextView txt_error;
     private CheckBox checkBox;
     private Button btn_login;
-    private boolean debug = true;
+    private boolean debug = false;
     private CheckBox cb_read;
 
 
@@ -102,6 +102,8 @@ public class login extends AppCompatActivity {
                     String isadmin = json.getString("admin");
                     if (isadmin.equals("true".toString())){
                         login.isadmin = true;
+                    } else {
+                        login.isadmin = false;
                     }
                     Log.d("ORM", str_error);
                     if (str_error =="true"){
