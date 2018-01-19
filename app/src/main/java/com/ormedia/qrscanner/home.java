@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -92,10 +93,7 @@ public class home extends AppCompatActivity {
         btn_sbtr = findViewById(R.id.btn_sbtr);
         btn_new = findViewById(R.id.btn_new);
         btn_scan.requestFocus();
-
-        if (!login.isadmin){
-            btn_new.setVisibility(View.INVISIBLE);
-        }
+        getExp();
 
         btn_scan.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -312,8 +310,20 @@ public class home extends AppCompatActivity {
         if (oricode ==""){
             oricode = code;
         }
-
+        getExp();
         startActivity(intent);
+    }
+
+    private void getExp(){
+        if (!TextUtils.isEmpty(txt_exp.getText())){
+            rexp = txt_exp.getText().toString();
+        }
+        if (!TextUtils.isEmpty(txt_lot.getText())){
+            rlot = txt_lot.getText().toString();
+        }
+        if (!login.isadmin){
+            btn_new.setVisibility(View.INVISIBLE);
+        }
     }
 
 

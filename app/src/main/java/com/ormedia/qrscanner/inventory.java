@@ -91,6 +91,7 @@ public class inventory extends AppCompatActivity implements AdapterView.OnItemSe
             code = home.code;
             userid = login.userid;
             oricode = home.oricode;
+            Log.d("exp: ",exp);
             if (oricode.equals("".toString())){
                 oricode = code;
             }
@@ -118,6 +119,7 @@ public class inventory extends AppCompatActivity implements AdapterView.OnItemSe
         RelativeLayout rl_price = findViewById(R.id.rl_price);
         RelativeLayout rl_inv = findViewById(R.id.rl_inv);
         RelativeLayout rl_reason = findViewById(R.id.rl_reason);
+
 
         spinner = findViewById(R.id.spinner);
         spinner.setOnItemSelectedListener(this);
@@ -290,16 +292,7 @@ public class inventory extends AppCompatActivity implements AdapterView.OnItemSe
                     String lot = json.getString("lot");
                     String exp = json.getString("exp");
                     String productID = json.getString("postid");
-                    try{
-                         exp = json.getString("exp");
-                    } catch (Exception e){
-                         exp = "";
-                    }
-                    try{
-                        lot = json.getString("lot");
-                    } catch (Exception e){
-                        lot = "";
-                    }
+
                     postid = productID;
                     while ((productID.length()<5)){
                         productID="0"+productID;
@@ -307,8 +300,17 @@ public class inventory extends AppCompatActivity implements AdapterView.OnItemSe
                     productName = supplier +  "\n" + productName ;
                     txt_pdname.setText(productName);
                     txt_pdgtin.setText(GTIN);
-                    txt_lot.setText(lot);
-                    txt_exp.setText(exp);
+                    if (exp.equals("".toString())){
+                        txt_exp.setText(home.rexp);
+                    } else {
+                        txt_exp.setText(exp);
+                    }
+                    if (lot.equals("".toString())){
+                        txt_lot.setText(home.rlot);
+                    } else {
+                        txt_lot.setText(lot);
+                    }
+
                     code = GTIN;
                     txt_pdqty.setText(quantity);
                     txt_pdcode.setText(productID);
