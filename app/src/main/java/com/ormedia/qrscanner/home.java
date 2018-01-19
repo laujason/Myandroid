@@ -47,6 +47,8 @@ public class home extends AppCompatActivity {
     public static String code;
     public static String oricode="";
     public static String method="";
+    public static String rexp="";
+    public static String rlot="";
     private int userid;
     private static final String LOG_TAG = FullscreenActivity.class.getSimpleName();
     private static final int BARCODE_READER_REQUEST_CODE = 1;
@@ -206,6 +208,12 @@ public class home extends AppCompatActivity {
                     String productID = json.getString("postid");
                     String lot = json.getString("lot");
                     String exp = json.getString("exp");
+                    if (lot.equals("".toString())){
+                        lot = rlot;
+                    }
+                    if (exp.equals("".toString())){
+                        exp = rexp;
+                    }
 
 
                     if (method.equals("pre".toString())){
@@ -229,7 +237,7 @@ public class home extends AppCompatActivity {
                         txt_exp.setText(exp);
                         code = GTIN;
                     } else {
-                        if (!method.equals("new".toString())) {
+                        if (!(method.equals("new".toString()) || method.equals("cancel".toString()) )) {
                             Toast.makeText(getApplicationContext(), "物品不存在", Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -243,6 +251,9 @@ public class home extends AppCompatActivity {
             }
         });
     }
+
+
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

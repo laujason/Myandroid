@@ -351,6 +351,8 @@ public class inventory extends AppCompatActivity implements AdapterView.OnItemSe
                     //String quantity = json.getString("quantity");
                     String error = json.getString("error");
                     String method = json.getString("method");
+                    home.rexp = json.getString("exp");
+                    home.rlot = json.getString("lot");
                     if (error=="false"){
                         Toast toast = Toast.makeText(getApplicationContext(), "庫存變更成功", Toast.LENGTH_LONG);
                         toast.setGravity(Gravity.CENTER|Gravity.BOTTOM, 0, 500);
