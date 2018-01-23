@@ -317,7 +317,6 @@ public class newpd extends AppCompatActivity {
                 Log.d("ORM",json.toString());
                 try {
                     JSONArray data = json.getJSONArray("sup_list");
-                    ArrayList<String> sup_list = new ArrayList<String>();
                     for (int i=0; i<200; i++){
                         suppliers[i] = "";
                         custom_id[i] = "";

@@ -1,9 +1,12 @@
 package com.ormedia.qrscanner;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
@@ -12,22 +15,16 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
-
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.ormedia.qrscanner.Network.JSONResponse;
 import com.ormedia.qrscanner.barcode.BarcodeCaptureActivity;
-
+import org.json.JSONArray;
 import org.json.JSONObject;
-
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 
-/**
- * Created by panleung on 27/12/2017.
- */
 
 public class home extends AppCompatActivity {
 
@@ -38,22 +35,18 @@ public class home extends AppCompatActivity {
     private TextView txt_code;
     private TextView txt_exp;
     private TextView txt_lot;
-    private Button btn_search;
-    private Button btn_scan;
-    private Button btn_logout;
-    private Button btn_hist;
-    private Button btn_add;
-    private Button btn_sbtr;
-    private Button btn_new;
+    protected Button btn_new;
     public static String code;
     public static String oricode="";
     public static String method="";
     public static String rexp="";
     public static String rlot="";
-    private int userid;
+    private Activity activity;
     private static final String LOG_TAG = FullscreenActivity.class.getSimpleName();
     private static final int BARCODE_READER_REQUEST_CODE = 1;
-
+    protected static String[] result_name;
+    protected static Integer[] result_id;
+    protected static String[] result_code;
 
 
     @Override
@@ -62,13 +55,10 @@ public class home extends AppCompatActivity {
         setContentView(R.layout.activity_home);
 
         try {
-            userid = login.userid;
-            Log.d("ORM","userid= " + userid);
-
-            Log.d("ORM","method= " + method);
-            if (oricode!=""){
+            int userid = login.userid;
+            if (!oricode.equals("")){
                 downLoadFromServer(oricode);
-            } else if (code!=""){
+            } else if (!code.equals("")){
                 downLoadFromServer(code);
             }
         } catch (Exception e){
@@ -85,14 +75,15 @@ public class home extends AppCompatActivity {
         txt_code = findViewById(R.id.txt_code);
         txt_exp = findViewById(R.id.txt_exp);
         txt_lot = findViewById(R.id.txt_lot);
-        btn_scan = findViewById(R.id.btn_scan);
-        btn_logout = findViewById(R.id.btn_logout);
-        btn_hist = findViewById(R.id.btn_hist);
-        btn_search = findViewById(R.id.btn_serach);
-        btn_add = findViewById(R.id.btn_add);
-        btn_sbtr = findViewById(R.id.btn_sbtr);
+        Button btn_scan = findViewById(R.id.btn_scan);
+        Button btn_logout = findViewById(R.id.btn_logout);
+        Button btn_hist = findViewById(R.id.btn_hist);
+        Button btn_search = findViewById(R.id.btn_serach);
+        Button btn_add = findViewById(R.id.btn_add);
+        Button btn_sbtr = findViewById(R.id.btn_sbtr);
         btn_new = findViewById(R.id.btn_new);
         btn_scan.requestFocus();
+        activity = this;
         getExp();
         if (!login.isadmin){
             btn_new.setVisibility(View.INVISIBLE);
@@ -176,6 +167,28 @@ public class home extends AppCompatActivity {
 
     }
 
+    private void show_results() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        builder.setTitle("搜尋結果:");
+
+        builder.setItems(result_name, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Log.d("result code",result_code[which]);
+                code = result_code[which];
+                Log.d("filtered code",code);
+                downLoadFromServer(code);
+            }
+        });
+
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+            }
+        });
+        AlertDialog search_result = builder.create();
+        search_result.show();
+    }
+
     @Override
     protected void onStart(){
         super.onStart();
@@ -201,6 +214,7 @@ public class home extends AppCompatActivity {
                 Log.d("ORM",json.toString());
                 Log.d("ORM","http://35.198.210.107/scan?action=scan&code="+ encode(GTIN));
                 try {
+
                     String GTIN = json.getString("code");
                     String productName = json.getString("productName");
                     String supplier = json.getString("supplierName");
@@ -208,6 +222,7 @@ public class home extends AppCompatActivity {
                     String productID = json.getString("postid");
                     String lot = json.getString("lot");
                     String exp = json.getString("exp");
+
                     if (lot.equals("".toString())){
                         lot = rlot;
                     }
@@ -223,6 +238,27 @@ public class home extends AppCompatActivity {
                             startActivity(intent);
                         }
                     }
+                        if (json.getString("search").equals("")){
+
+                        } else if (json.getString("search").equals("no result")) {
+                            Toast.makeText(getApplicationContext(),"沒有搜尋結果",Toast.LENGTH_LONG).show();
+                        } else {
+                            JSONArray data = json.getJSONArray("search");
+                            Integer datalength = data.length();
+                            if (datalength > 0) {
+                                result_name = new String[datalength];
+                                result_code = new String[datalength];
+                                result_id = new Integer[datalength];
+                                for (int i = 0; i < datalength; i++) {
+                                    String data_string = data.getString(i);
+                                    String[] result_array = data_string.split("\"");
+                                    result_id[i] = Integer.valueOf(result_array[3]);
+                                    result_name[i] = result_array[7].toString();
+                                    result_code[i] = result_array[11].replace("\\u001d","");
+                                }
+                                show_results();
+                            }
+                        }
 
                     if (!productName.equals("".toString())) {
                         while ((productID.length()<5)){
@@ -231,7 +267,8 @@ public class home extends AppCompatActivity {
                         productName = supplier + "\n" + productName;
                         txt_pdname.setText(productName);
                         txt_pdcode.setText(productID);
-                        txt_pdgtin.setText(GTIN);
+                        txt_pdgtin.setText(GTIN.replace("\u001d",""));
+                        Log.d("gtin text", txt_pdgtin.getText().toString());
                         txt_pdqty.setText(quantity);
                         txt_lot.setText(lot);
                         txt_exp.setText(exp);
