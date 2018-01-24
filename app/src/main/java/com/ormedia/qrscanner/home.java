@@ -21,7 +21,7 @@ import com.ormedia.qrscanner.Network.JSONResponse;
 import com.ormedia.qrscanner.barcode.BarcodeCaptureActivity;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import java.io.UnsupportedEncodingException;
+
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 
@@ -41,6 +41,7 @@ public class home extends AppCompatActivity {
     public static String method="";
     public static String rexp="";
     public static String rlot="";
+    public static Integer userid;
     private Activity activity;
     private static final String LOG_TAG = FullscreenActivity.class.getSimpleName();
     private static final int BARCODE_READER_REQUEST_CODE = 1;
@@ -55,14 +56,14 @@ public class home extends AppCompatActivity {
         setContentView(R.layout.activity_home);
 
         try {
-            int userid = login.userid;
+            userid = login.userid;
             if (!oricode.equals("")){
                 downLoadFromServer(oricode);
             } else if (!code.equals("")){
                 downLoadFromServer(code);
             }
         } catch (Exception e){
-
+            Log.e("ORM", e.toString());
         }
 
         //TextView textView = findViewById(R.id.textView4);
@@ -109,6 +110,7 @@ public class home extends AppCompatActivity {
 
                     if (view != null) {
                         InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                        assert imm != null;
                         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                     }
                 }
@@ -223,24 +225,23 @@ public class home extends AppCompatActivity {
                     String lot = json.getString("lot");
                     String exp = json.getString("exp");
 
-                    if (lot.equals("".toString())){
+                    if (lot.equals("")){
                         lot = rlot;
                     }
-                    if (exp.equals("".toString())){
+                    if (exp.equals("")){
                         exp = rexp;
                     }
 
 
-                    if (method.equals("pre".toString())){
+                    if (method.equals("pre")){
                         method = "new";
                         if (login.isadmin){
                             Intent intent = new Intent(getApplicationContext(), newpd.class);
                             startActivity(intent);
                         }
                     }
-                        if (json.getString("search").equals("")){
-
-                        } else if (json.getString("search").equals("no result")) {
+                    if (!json.getString("search").equals("")) {
+                        if (json.getString("search").equals("no result")) {
                             Toast.makeText(getApplicationContext(),"沒有搜尋結果",Toast.LENGTH_LONG).show();
                         } else {
                             JSONArray data = json.getJSONArray("search");
@@ -253,12 +254,13 @@ public class home extends AppCompatActivity {
                                     String data_string = data.getString(i);
                                     String[] result_array = data_string.split("\"");
                                     result_id[i] = Integer.valueOf(result_array[3]);
-                                    result_name[i] = result_array[7].toString();
+                                    result_name[i] = result_array[7];
                                     result_code[i] = result_array[11].replace("\\u001d","");
                                 }
                                 show_results();
                             }
                         }
+                    }
 
                     if (!productName.equals("".toString())) {
                         while ((productID.length()<5)){
@@ -320,7 +322,7 @@ public class home extends AppCompatActivity {
                 decodeURL = URLDecoder.decode( decodeURL, "UTF-8" );
             }
             return decodeURL;
-        } catch (UnsupportedEncodingException e) {
+        } catch (Exception e) {
             return "Error: " + e.getMessage();
         }
     }
@@ -329,7 +331,7 @@ public class home extends AppCompatActivity {
         try {
             String encodeURL = URLEncoder.encode( url, "UTF-8" );
             return encodeURL;
-        } catch (UnsupportedEncodingException e) {
+        } catch (Exception e) {
             return "Error: " + e.getMessage();
         }
     }

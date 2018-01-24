@@ -46,6 +46,7 @@ public class login extends AppCompatActivity {
         cb_read =  findViewById(R.id.cb_read);
         cb_read.setChecked(debug);
 
+        txt_disclaimer.setKeyListener(null);
 
 
         btn_login.setOnClickListener(new View.OnClickListener() {
