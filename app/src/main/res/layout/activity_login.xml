@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/login_bg"
     android:orientation="vertical">
 
     <LinearLayout
+        android:id="@+id/logo"
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:orientation="vertical">
@@ -25,7 +26,8 @@
             android:layout_centerHorizontal="true"
             android:background="@color/colorWhite"
             android:ems="10"
-            android:inputType="phone" />
+            android:inputType="phone"
+            android:labelFor="@+id/txt_phone" />
 
         <EditText
             android:id="@+id/txt_psw"
@@ -36,7 +38,8 @@
             android:layout_below="@+id/textView"
             android:background="@color/colorWhite"
             android:ems="10"
-            android:inputType="textPassword" />
+            android:inputType="textPassword"
+            android:labelFor="@+id/txt_psw" />
 
         <TextView
             android:id="@+id/textView"
@@ -44,7 +47,7 @@
             android:layout_height="wrap_content"
             android:layout_alignStart="@+id/txt_phone"
             android:layout_below="@+id/txt_phone"
-            android:text="密碼：" />
+            android:text="@string/psw" />
 
         <TextView
             android:id="@+id/textView2"
@@ -52,7 +55,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_alignStart="@+id/txt_phone"
-            android:text="電話號碼：" />
+            android:text="@string/phone" />
 
         <TextView
             android:id="@+id/textView3"
@@ -60,7 +63,7 @@
             android:layout_height="wrap_content"
             android:layout_alignStart="@+id/txt_psw"
             android:layout_below="@+id/txt_error"
-            android:text="免責聲明：" />
+            android:text="@string/dis" />
 
         <EditText
             android:id="@+id/txt_disclaimer"
@@ -73,6 +76,7 @@
             android:background="@color/colorWhite"
             android:ems="10"
             android:inputType="textMultiLine"
+            android:labelFor="@+id/txt_disclaimer"
             android:singleLine="false" />
 
         <CheckBox
@@ -82,7 +86,7 @@
             android:layout_alignStart="@+id/txt_disclaimer"
             android:layout_below="@+id/txt_disclaimer"
             android:paddingBottom="10dp"
-            android:text="本人已閱讀並同意有關聲明。"
+            android:text="@string/read"
             android:textSize="12sp" />
 
         <Button
@@ -93,7 +97,7 @@
             android:layout_alignEnd="@+id/txt_disclaimer"
             android:layout_below="@+id/cb_read"
             android:background="@drawable/login_btn"
-            android:elevation="0dp" />
+            android:elevation="0dp" tools:targetApi="lollipop" />
 
         <TextView
             android:id="@+id/txt_error"
@@ -103,7 +107,7 @@
             android:layout_alignStart="@+id/textView3"
             android:layout_below="@+id/txt_psw"
             android:layout_marginBottom="10dp"
-            android:text="用戶名或密碼錯誤"
+            android:text="@string/login_error"
             android:textColor="@android:color/holo_red_light"
             android:visibility="invisible" />
 

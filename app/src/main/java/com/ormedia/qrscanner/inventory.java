@@ -1,5 +1,6 @@
 package com.ormedia.qrscanner;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -21,16 +22,10 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.ormedia.qrscanner.Network.JSONResponse;
-
 import org.json.JSONObject;
-
 import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.net.URLEncoder;
-
-import static java.lang.Math.round;
 
 
 /**
@@ -43,7 +38,6 @@ public class inventory extends AppCompatActivity implements AdapterView.OnItemSe
     private TextView txt_pdcode;
     private TextView txt_pdgtin;
     private TextView txt_pdqty;
-    private TextView txt_sup;
     private TextView txt_actqyt;
     private TextView txt_remark;
     private TextView txt_exp;
@@ -52,31 +46,21 @@ public class inventory extends AppCompatActivity implements AdapterView.OnItemSe
     private TextView txt_ttp;
     private TextView txt_unp;
     private TextView txt_gift;
-    private Button btn_confirm;
-    private Button btn_cancel;
 
     private String code;
     private String method;
     private String oricode;
     private String exp;
-    private String lot;
-    private String inv;
     private int userid;
     private String reason;
     private String postid;
     private String action;
     private Double ttp;
-    private Double unp;
     private Integer actqty = 0;
     private Integer giftqty = 0;
-    private ImageView img_title;
-    private AlertDialog dlg_confirm;
     private Spinner spinner;
     private Activity activity;
-    public static final String msg_code = "com.ormedia.qrscanner.code";
-    public static final String msg_method = "com.ormedia.qrscanner.method";
-    public static final String msg_oricode = "com.ormedia.qrscanner.oricode";
-    public static final String msg_userid = "com.ormedia.qrscanner.userid";
+
 
 
 
@@ -92,10 +76,10 @@ public class inventory extends AppCompatActivity implements AdapterView.OnItemSe
             userid = login.userid;
             oricode = home.oricode;
             Log.d("exp: ",exp);
-            if (oricode.equals("".toString())){
+            if (oricode.equals("")){
                 oricode = code;
             }
-        } catch (Exception e){
+        } catch (Exception ignored){
 
         }
 
@@ -103,7 +87,7 @@ public class inventory extends AppCompatActivity implements AdapterView.OnItemSe
         txt_pdcode = findViewById(R.id.txt_pdcode);
         txt_pdgtin = findViewById(R.id.txt_pdgtin);
         txt_pdqty = findViewById(R.id.txt_pdqty);
-        txt_sup = findViewById(R.id.txt_sup);
+        TextView txt_sup = findViewById(R.id.txt_sup);
         txt_exp = findViewById(R.id.txt_exp);
         txt_lot = findViewById(R.id.txt_lot);
         txt_inv = findViewById(R.id.txt_inv);
@@ -112,9 +96,9 @@ public class inventory extends AppCompatActivity implements AdapterView.OnItemSe
         txt_remark = findViewById(R.id.txt_remark);
         txt_actqyt =findViewById(R.id.txt_actqty);
         txt_gift =findViewById(R.id.txt_gift);
-        img_title = findViewById(R.id.img_title);
-        btn_confirm = findViewById(R.id.btn_confirm);
-        btn_cancel = findViewById(R.id.btn_cancel);
+        ImageView img_title = findViewById(R.id.img_title);
+        Button btn_confirm = findViewById(R.id.btn_confirm);
+        Button btn_cancel = findViewById(R.id.btn_cancel);
         RelativeLayout rl_gift = findViewById(R.id.rl_gift);
         RelativeLayout rl_price = findViewById(R.id.rl_price);
         RelativeLayout rl_inv = findViewById(R.id.rl_inv);
@@ -133,7 +117,7 @@ public class inventory extends AppCompatActivity implements AdapterView.OnItemSe
 
 
         downLoadFromServer(oricode);
-        if (method.equals("out".toString()) ){
+        if (method.equals("out") ){
             img_title.setImageResource(R.drawable.home_out);
             txt_sup.setText("使用量：");
             action = "消耗";
@@ -142,7 +126,7 @@ public class inventory extends AppCompatActivity implements AdapterView.OnItemSe
             rl_price.setVisibility(View.INVISIBLE);
             rl_inv.setLayoutParams(new LinearLayout.LayoutParams(0,0));
             rl_inv.setVisibility(View.INVISIBLE);
-        } else if (method.equals("in".toString())){
+        } else if (method.equals("in")){
             img_title.setImageResource(R.drawable.home_in);
             txt_sup.setText("購買量：");
             action = "補充";
@@ -226,7 +210,7 @@ public class inventory extends AppCompatActivity implements AdapterView.OnItemSe
                     ttp = Double.valueOf(txt_ttp.getText().toString());
 
                 } catch (Exception e) {
-                    ttp = Double.valueOf(0);
+                    ttp = 0d;
                 }
                 update_unp();
             }
@@ -241,6 +225,7 @@ public class inventory extends AppCompatActivity implements AdapterView.OnItemSe
 
     }
 
+    @SuppressLint("DefaultLocale")
     private boolean checkForm() {
         boolean cansubmit;
         txt_ttp.setText(String.format("%.2f", ttp));
@@ -249,8 +234,8 @@ public class inventory extends AppCompatActivity implements AdapterView.OnItemSe
                     TextUtils.isEmpty(txt_lot.getText()) ||
                     //TextUtils.isEmpty(txt_inv.getText())  ||
                     //TextUtils.isEmpty(txt_ttp.getText()) && method == "out")
-                (method.equals("in".toString()) && TextUtils.isEmpty(txt_inv.getText()))  ||
-                (method.equals("in".toString()) && TextUtils.isEmpty(txt_ttp.getText())));
+                (method.equals("in") && TextUtils.isEmpty(txt_inv.getText()))  ||
+                (method.equals("in") && TextUtils.isEmpty(txt_ttp.getText())));
         Log.d("ORM",Boolean.toString(cansubmit));
         if (!cansubmit){
             Toast.makeText(getApplicationContext(), "請填入所有項", Toast.LENGTH_SHORT).show();
@@ -267,14 +252,14 @@ public class inventory extends AppCompatActivity implements AdapterView.OnItemSe
         builder.setMessage("你確定要"+ action + total.toString()+"件嗎？");
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                inventory();
+                move_inv();
             }
         });
         builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
             }
         });
-        dlg_confirm = builder.create();
+        AlertDialog dlg_confirm = builder.create();
         dlg_confirm.show();
     }
 
@@ -291,21 +276,21 @@ public class inventory extends AppCompatActivity implements AdapterView.OnItemSe
                     String quantity = json.getString("quantity");
                     String lot = json.getString("lot");
                     String exp = json.getString("exp");
-                    String productID = json.getString("postid");
+                    StringBuilder productID = new StringBuilder(json.getString("postid"));
 
-                    postid = productID;
+                    postid = productID.toString();
                     while ((productID.length()<5)){
-                        productID="0"+productID;
+                        productID.insert(0, "0");
                     }
                     productName = supplier +  "\n" + productName ;
                     txt_pdname.setText(productName);
                     txt_pdgtin.setText(GTIN);
-                    if (exp.equals("".toString())){
+                    if (exp.equals("")){
                         txt_exp.setText(home.rexp);
                     } else {
                         txt_exp.setText(exp);
                     }
-                    if (lot.equals("".toString())){
+                    if (lot.equals("")){
                         txt_lot.setText(home.rlot);
                     } else {
                         txt_lot.setText(lot);
@@ -313,7 +298,7 @@ public class inventory extends AppCompatActivity implements AdapterView.OnItemSe
 
                     code = GTIN;
                     txt_pdqty.setText(quantity);
-                    txt_pdcode.setText(productID);
+                    txt_pdcode.setText(productID.toString());
                 } catch(Exception e) {
                     Log.e("ORM","FullScreenActivity onActivity Result : "+e.toString());
                 }
@@ -321,41 +306,24 @@ public class inventory extends AppCompatActivity implements AdapterView.OnItemSe
         });
     }
 
-    public static String decode(String url) {
-        try {
-            String prevURL = "";
-            String decodeURL = url;
-            while(!prevURL.equals(decodeURL)) {
-                prevURL = decodeURL;
-                decodeURL = URLDecoder.decode( decodeURL, "UTF-8" );
-            }
-            return decodeURL;
-        } catch (UnsupportedEncodingException e) {
-            return "Error: " + e.getMessage();
-        }
-    }
-
     public static String encode(String url) {
         try {
-            String encodeURL = URLEncoder.encode( url, "UTF-8" );
-            return encodeURL;
+            return URLEncoder.encode( url, "UTF-8" );
         } catch (UnsupportedEncodingException e) {
             return "Error: " + e.getMessage();
         }
     }
 
-    public void inventory(){
+    public void move_inv(){
         new JSONResponse(this, inv_url(), new JSONResponse.onComplete() {
             @Override
             public void onComplete(JSONObject json) {
                 Log.d("ORM",json.toString());
                 try {
-                    //String quantity = json.getString("quantity");
                     String error = json.getString("error");
-                    String method = json.getString("method");
                     home.rexp = json.getString("exp");
                     home.rlot = json.getString("lot");
-                    if (error=="false"){
+                    if (error.equals("false")){
                         Toast toast = Toast.makeText(getApplicationContext(), "庫存變更成功", Toast.LENGTH_LONG);
                         toast.setGravity(Gravity.CENTER|Gravity.BOTTOM, 0, 500);
                         toast.show();
@@ -377,14 +345,13 @@ public class inventory extends AppCompatActivity implements AdapterView.OnItemSe
 
     public String inv_url(){
         exp = txt_exp.getText().toString();
-        lot = txt_lot.getText().toString();
-        inv = txt_inv.getText().toString();
-        //ttp = txt_ttp.getText().toString();
-        if (method.equals("in".toString())){
+        String lot = txt_lot.getText().toString();
+        String inv = txt_inv.getText().toString();
+        if (method.equals("in")){
             reason = "";
         }
         String remark = txt_remark.getText().toString();
-        String url = "http://35.198.210.107/inventory?method=" + method +
+        String url = "http://35.198.210.107/move_inv?method=" + method +
                 "&postid=" + postid + "&quantity=" + actqty +
                 "&giftqty=" + giftqty +"&remark=" + reason + remark +
                 "&exp=" + exp + "&lot=" + lot +
@@ -415,17 +382,18 @@ public class inventory extends AppCompatActivity implements AdapterView.OnItemSe
         try {
             ttp = Double.valueOf(txt_ttp.getText().toString());
         } catch (Exception e){
-            ttp = Double.valueOf(0);
+            ttp = 0d;
         }
+        Double unp;
         try {
             unp = ttp / (actqty + giftqty);
         } catch (Exception e){
-            unp = Double.valueOf(0);
+            unp = 0d;
         }
         if (unp.isNaN() || unp.isInfinite()){
-            unp = Double.valueOf(0);
+            unp = 0d;
         }
-        txt_unp.setText("單價: " + String.format("%.2f", unp));
+        txt_unp.setText(String.format("單價: %s", String.format("%.2f", unp)));
 
     }
 }

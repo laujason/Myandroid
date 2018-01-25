@@ -14,6 +14,7 @@ import com.ormedia.qrscanner.Network.*;
 import org.json.JSONObject;
 
 
+
 /**
  * Created by panleung on 20/12/2017.
  */
@@ -23,10 +24,7 @@ public class login extends AppCompatActivity {
     public static Boolean isadmin;
     private TextView txt_phone;
     private TextView txt_psw;
-    private TextView txt_disclaimer;
     private TextView txt_error;
-    private CheckBox checkBox;
-    private Button btn_login;
     private boolean debug = false;
     private CheckBox cb_read;
 
@@ -41,8 +39,8 @@ public class login extends AppCompatActivity {
         txt_phone = findViewById(R.id.txt_phone);
         txt_psw = findViewById(R.id.txt_psw);
         txt_error = findViewById(R.id.txt_error);
-        txt_disclaimer = findViewById(R.id.txt_disclaimer);
-        btn_login = findViewById(R.id.btn_login);
+        TextView txt_disclaimer = findViewById(R.id.txt_disclaimer);
+        Button btn_login = findViewById(R.id.btn_login);
         cb_read =  findViewById(R.id.cb_read);
         cb_read.setChecked(debug);
 
@@ -101,15 +99,11 @@ public class login extends AppCompatActivity {
                     userid = Integer.parseInt(json.getString("userid"));
                     String str_error = json.getString("error");
                     String isadmin = json.getString("admin");
-                    if (isadmin.equals("true".toString())){
-                        login.isadmin = true;
-                    } else {
-                        login.isadmin = false;
-                    }
+                    login.isadmin = isadmin.equals("true");
                     Log.d("ORM", str_error);
-                    if (str_error =="true"){
+                    if (str_error.equals("true")){
                         Log.d("ORM", "return error");
-                    } else if (str_error =="false" || debug){
+                    } else if (str_error.equals("false") || debug){
                         txt_error.setVisibility(View.INVISIBLE);
                         Intent intent = new Intent(getApplicationContext(), home.class);
                         //intent.putExtra(msg_userid, str_userid);

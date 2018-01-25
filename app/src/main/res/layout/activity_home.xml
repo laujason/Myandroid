@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/relativeLayout"
+    xmlns:tools="http://schemas.android.com/tools" android:id="@+id/relativeLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -12,6 +12,7 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:adjustViewBounds="true"
+        android:contentDescription="@string/history"
         android:scaleType="fitXY"
         app:srcCompat="@drawable/home_1" />
 
@@ -30,7 +31,7 @@
             android:layout_marginEnd="10dp"
             android:background="@color/colorWhite"
             android:shadowColor="#007672"
-            android:text="添加新產品"
+            android:text="@string/add_new"
             android:textColor="#007672" />
 
         <ImageView
@@ -39,6 +40,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:adjustViewBounds="true"
+            android:contentDescription="@string/title_search"
             android:scaleType="fitXY"
             app:srcCompat="@drawable/home_2" />
     </RelativeLayout>
@@ -58,6 +60,7 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:adjustViewBounds="true"
+            android:contentDescription="@string/button_scan"
             android:scaleType="fitXY"
             app:srcCompat="@drawable/home_2_1" />
 
@@ -69,7 +72,7 @@
             android:layout_centerHorizontal="true"
             android:alpha="0"
             android:focusedByDefault="true"
-            android:text="Button" />
+            android:text="@string/button" tools:targetApi="o" />
     </RelativeLayout>
 
     <ImageView
@@ -79,6 +82,7 @@
         android:layout_alignParentEnd="true"
         android:layout_below="@+id/relativeLayout3"
         android:adjustViewBounds="true"
+        android:contentDescription="@string/separate"
         android:scaleType="fitXY"
         app:srcCompat="@drawable/home_4" />
 
@@ -100,7 +104,9 @@
             android:background="@drawable/home_3"
             android:ems="10"
             android:focusedByDefault="false"
-            android:inputType="textPersonName" />
+            android:inputType="textPersonName"
+            android:labelFor="@+id/txt_code"
+            tools:targetApi="o" />
 
         <TextView
             android:id="@+id/textView6"
@@ -111,7 +117,7 @@
             android:layout_alignStart="@+id/txt_code"
             android:layout_marginBottom="2dp"
             android:layout_marginTop="10dp"
-            android:text="GTIN編號或產品名稱：" />
+            android:text="@string/gtin_or_product_name" />
 
         <Button
             android:id="@+id/btn_serach"
@@ -130,6 +136,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
         android:adjustViewBounds="true"
+        android:contentDescription="@string/bottom_buttons"
         android:scaleType="fitXY"
         app:srcCompat="@drawable/home_5" />
 
@@ -163,7 +170,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentStart="true"
                         android:layout_alignParentTop="true"
-                        android:text="產品名稱：" />
+                        android:text="@string/product_name" />
 
                     <TextView
                         android:id="@+id/txt_pdname"
@@ -191,7 +198,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentStart="true"
                         android:paddingBottom="5dp"
-                        android:text="產品編號：" />
+                        android:text="@string/product_number" />
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -211,7 +218,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentStart="true"
                         android:layout_marginBottom="5dp"
-                        android:text="GTIN：" />
+                        android:text="@string/gtin" />
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -231,7 +238,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentStart="true"
                         android:layout_marginBottom="5dp"
-                        android:text="批次號：" />
+                        android:text="@string/lot" />
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -251,7 +258,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentStart="true"
                         android:layout_marginBottom="5dp"
-                        android:text="到期日：" />
+                        android:text="@string/exp" />
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -272,7 +279,7 @@
                         android:layout_alignParentStart="true"
                         android:layout_alignParentTop="true"
                         android:paddingBottom="5dp"
-                        android:text="存量：" />
+                        android:text="@string/quantity" />
 
                 </RelativeLayout>
 

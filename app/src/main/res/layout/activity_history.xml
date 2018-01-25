@@ -10,7 +10,7 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:alpha="0"
-        android:text="Button" />
+        android:text="@string/button" />
 
     <ImageView
         android:id="@+id/img_title"
@@ -19,6 +19,7 @@
         android:layout_alignParentStart="true"
         android:layout_below="@+id/img_header"
         android:adjustViewBounds="true"
+        android:contentDescription="@string/title_history"
         android:scaleType="fitXY"
         app:srcCompat="@drawable/history" />
 
@@ -29,6 +30,7 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:adjustViewBounds="true"
+        android:contentDescription="@string/title_bar"
         android:scaleType="fitXY"
         app:srcCompat="@drawable/home_1_2" />
 
@@ -64,7 +66,7 @@
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
                 android:background="@drawable/button_lo"
-                android:text="補貨記錄"
+                android:text="@string/sup_log"
                 android:textAlignment="center"
                 android:textColor="#006966" />
 
@@ -75,7 +77,7 @@
                 android:layout_centerVertical="true"
                 android:layout_toStartOf="@+id/imageView"
                 android:background="@drawable/button_hi"
-                android:text="所有記錄"
+                android:text="@string/all_log"
                 android:textAlignment="center"
                 android:textColor="#006966" />
 
@@ -86,7 +88,7 @@
                 android:layout_centerVertical="true"
                 android:layout_toEndOf="@+id/imageView"
                 android:background="@drawable/button_lo"
-                android:text="使用記錄"
+                android:text="@string/usage_log"
                 android:textAlignment="center"
                 android:textColor="#006966" />
 

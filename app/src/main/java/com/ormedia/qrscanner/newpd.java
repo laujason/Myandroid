@@ -1,5 +1,6 @@
 package com.ormedia.qrscanner;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -12,27 +13,19 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.ormedia.qrscanner.Network.JSONResponse;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.net.URLEncoder;
-import java.util.ArrayList;
 import java.util.Arrays;
+
+import static java.lang.String.*;
 
 
 /**
@@ -44,8 +37,6 @@ public class newpd extends AppCompatActivity {
     private TextView txt_pdname;
     private TextView txt_pdcode;
     private TextView txt_pdgtin;
-    private TextView txt_pdqty;
-    private TextView txt_sup;
     private TextView txt_actqyt;
     private TextView txt_remark;
     private TextView txt_exp;
@@ -55,31 +46,21 @@ public class newpd extends AppCompatActivity {
     private TextView txt_unp;
     private TextView txt_gift;
     private TextView txt_suppid;
-    private Button btn_confirm;
-    private Button btn_cancel;
     private String code;
     private String method;
     private String oricode;
-    private String exp;
-    private String lot;
-    private String inv;
     private int userid;
     private String postid;
     private String action;
     private Double ttp;
-    private Double unp;
     private Integer actqty = 0;
     private Integer giftqty = 0;
-    private AlertDialog dlg_confirm;
     private Activity activity;
     private AutoCompleteTextView txt_supplier;
-    public static final String msg_code = "com.ormedia.qrscanner.code";
-    public static final String msg_method = "com.ormedia.qrscanner.method";
-    public static final String msg_oricode = "com.ormedia.qrscanner.oricode";
-    public static final String msg_userid = "com.ormedia.qrscanner.userid";
+
 
     private static String[] suppliers = new String[200];
-    private static String[] custom_id = new String[200];
+    public static String[] custom_id = new String[200];
 
 
     @Override
@@ -89,25 +70,24 @@ public class newpd extends AppCompatActivity {
 
         get_supplier();
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, suppliers);
-        txt_supplier = (AutoCompleteTextView) findViewById(R.id.txt_supplier);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, suppliers);
+        txt_supplier = findViewById(R.id.txt_supplier);
         txt_supplier.setAdapter(adapter);
 
         method = "new";
         try {
             userid = login.userid;
             oricode = home.oricode;
-            if (oricode.equals("".toString())){
+            if (oricode.equals("")){
                 Toast.makeText(getApplicationContext(),"獲取產品編碼失敗，請手動輸入。",Toast.LENGTH_LONG).show();
             }
-        } catch (Exception e){
+        } catch (Exception ignored){
 
         }
 
         txt_pdname = findViewById(R.id.txt_pdname);
         txt_pdcode = findViewById(R.id.txt_pdcode);
         txt_pdgtin = findViewById(R.id.txt_pdgtin);
-        txt_sup = findViewById(R.id.txt_sup);
         txt_exp = findViewById(R.id.txt_exp);
         txt_lot = findViewById(R.id.txt_lot);
         txt_inv = findViewById(R.id.txt_inv);
@@ -117,8 +97,8 @@ public class newpd extends AppCompatActivity {
         txt_actqyt = findViewById(R.id.txt_actqty);
         txt_gift = findViewById(R.id.txt_gift);
         txt_suppid = findViewById(R.id.txt_suppid);
-        btn_confirm = findViewById(R.id.btn_confirm);
-        btn_cancel = findViewById(R.id.btn_cancel);
+        Button btn_confirm = findViewById(R.id.btn_confirm);
+        Button btn_cancel = findViewById(R.id.btn_cancel);
 
 
         activity = this;
@@ -153,10 +133,10 @@ public class newpd extends AppCompatActivity {
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 try{
                     String suppliertext = txt_supplier.getText().toString();
-                    if (!suppliertext.equals("".toString())) {
+                    if (!suppliertext.equals("")) {
                         int customid = Arrays.asList(suppliers).indexOf(suppliertext)+1;
                         if (customid > 0) {
-                            txt_suppid.setText(String.valueOf(customid));
+                            txt_suppid.setText(valueOf(customid));
                         } else {
                             txt_suppid.setText("");
                         }
@@ -223,7 +203,7 @@ public class newpd extends AppCompatActivity {
                     ttp = Double.valueOf(txt_ttp.getText().toString());
 
                 } catch (Exception e) {
-                    ttp = Double.valueOf(0);
+                    ttp = 0d;
                 }
                 update_unp();
             }
@@ -235,9 +215,11 @@ public class newpd extends AppCompatActivity {
         });
     }
 
+
+    @SuppressLint("DefaultLocale")
     private boolean checkForm() {
         boolean cansubmit;
-        txt_ttp.setText(String.format("%.2f", ttp));
+        txt_ttp.setText(format("%.2f", ttp));
         cansubmit = !(TextUtils.isEmpty(txt_actqyt.getText()) ||
                     TextUtils.isEmpty(txt_exp.getText()) ||
                     TextUtils.isEmpty(txt_lot.getText()) ||
@@ -267,7 +249,7 @@ public class newpd extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int id) {
             }
         });
-        dlg_confirm = builder.create();
+        AlertDialog dlg_confirm = builder.create();
         dlg_confirm.show();
     }
 
@@ -280,20 +262,19 @@ public class newpd extends AppCompatActivity {
                     String GTIN = json.getString("code");
                     String productName = json.getString("productName");
 
-                    if (!productName.equals("".toString())){
+                    if (!productName.equals("")){
                         action = "你確定要修改產品資料並補充";
                         Toast.makeText(getApplicationContext(),"產品已經存在，繼續修改將覆蓋資料！",Toast.LENGTH_LONG).show();
                     } else {
                         action = "你確定要新增產品並補充";
                     }
                     String supplier = json.getString("supplierName");
-                    String quantity = json.getString("quantity");
                     String lot = json.getString("lot");
                     String exp = json.getString("exp");
-                    String productID = json.getString("postid");
-                    postid = productID;
+                    StringBuilder productID = new StringBuilder(json.getString("postid"));
+                    postid = productID.toString();
                     while ((productID.length()<5)){
-                        productID="0"+productID;
+                        productID.insert(0, "0");
                     }
                     txt_supplier.setText(supplier);
                     txt_pdname.setText(productName);
@@ -301,7 +282,7 @@ public class newpd extends AppCompatActivity {
                     txt_lot.setText(lot);
                     txt_exp.setText(exp);
                     code = GTIN;
-                    txt_pdcode.setText(productID);
+                    txt_pdcode.setText(productID.toString());
 
                 } catch(Exception e) {
                     Log.e("ORM","FullScreenActivity onActivity Result : "+e.toString());
@@ -324,33 +305,18 @@ public class newpd extends AppCompatActivity {
                     for (int i=0;i<data.length();i++){
                         String data_string = data.getString(i);
                         String[] sup_array = data_string.split("\"");
-                        suppliers[i] = sup_array[7].toString();
-                        custom_id[i] = sup_array[11].toString();
+                        suppliers[i] = sup_array[7];
+                        custom_id[i] = sup_array[11];
                     }
-                } catch (Exception e){
+                } catch (Exception ignored){
                 }
             }
         });
     }
 
-    public static String decode(String url) {
-        try {
-            String prevURL = "";
-            String decodeURL = url;
-            while(!prevURL.equals(decodeURL)) {
-                prevURL = decodeURL;
-                decodeURL = URLDecoder.decode( decodeURL, "UTF-8" );
-            }
-            return decodeURL;
-        } catch (UnsupportedEncodingException e) {
-            return "Error: " + e.getMessage();
-        }
-    }
-
     public static String encode(String url) {
         try {
-            String encodeURL = URLEncoder.encode( url, "UTF-8" );
-            return encodeURL;
+            return URLEncoder.encode( url, "UTF-8" );
         } catch (UnsupportedEncodingException e) {
             return "Error: " + e.getMessage();
         }
@@ -362,13 +328,11 @@ public class newpd extends AppCompatActivity {
             public void onComplete(JSONObject json) {
                 Log.d("ORM",json.toString());
                 try {
-                    //String quantity = json.getString("quantity");
                     String error = json.getString("error");
-                    String method = json.getString("method");
                     home.rexp = json.getString("exp");
                     home.rlot = json.getString("lot");
 
-                    if (error=="false"){
+                    if (error.equals("false")){
                         Toast toast = Toast.makeText(getApplicationContext(), "庫存變更成功", Toast.LENGTH_LONG);
                         toast.setGravity(Gravity.CENTER|Gravity.BOTTOM, 0, 500);
                         toast.show();
@@ -389,16 +353,16 @@ public class newpd extends AppCompatActivity {
     }
 
     public String inv_url(){
-        exp = txt_exp.getText().toString();
-        lot = txt_lot.getText().toString();
-        inv = txt_inv.getText().toString();
+        String exp = txt_exp.getText().toString();
+        String lot = txt_lot.getText().toString();
+        String inv = txt_inv.getText().toString();
         String supplierid = txt_suppid.getText().toString();
         String supplier = txt_supplier.getText().toString();
         String pdname = encode(txt_pdname.getText().toString());
         oricode = txt_pdgtin.getText().toString();
         String remark = encode(txt_remark.getText().toString());
 
-        String url = "http://35.198.210.107/inventory?method=" + method +
+        String url = "http://35.198.210.107/move_inv?method=" + method +
                 "&code=" + oricode + "&productName=" + pdname +
                 "&postid=" + postid + "&quantity=" + actqty +
                 "&giftqty=" + giftqty +"&remark=" + remark +
@@ -411,21 +375,23 @@ public class newpd extends AppCompatActivity {
 
 
 
+    @SuppressLint("DefaultLocale")
     public void update_unp(){
         try {
             ttp = Double.valueOf(txt_ttp.getText().toString());
         } catch (Exception e){
-            ttp = Double.valueOf(0);
+            ttp = 0d;
         }
+        Double unp;
         try {
             unp = ttp / (actqty + giftqty);
         } catch (Exception e){
-            unp = Double.valueOf(0);
+            unp = 0d;
         }
         if (unp.isNaN() || unp.isInfinite()){
-            unp = Double.valueOf(0);
+            unp = 0d;
         }
-        txt_unp.setText("單價: " + String.format("%.2f", unp));
+        txt_unp.setText(format("單價: %s", format("%.2f", unp)));
 
     }
 }

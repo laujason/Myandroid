@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+
 
     <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/relativeLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -15,18 +15,20 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:adjustViewBounds="true"
+            android:contentDescription="@string/title_bar"
             android:scaleType="fitXY"
             app:srcCompat="@drawable/header" />
 
-        <ImageView
-            android:id="@+id/img_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/img_header"
-            android:adjustViewBounds="true"
-            android:scaleType="fitXY"
-            app:srcCompat="@drawable/home_in" />
+    <ImageView
+        android:id="@+id/img_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/img_header"
+        android:adjustViewBounds="true"
+        android:contentDescription="title_sup"
+        android:scaleType="fitXY"
+        app:srcCompat="@drawable/home_in" />
 
         <RelativeLayout
             android:id="@+id/relativeLayout2"
@@ -38,15 +40,16 @@
 
         </RelativeLayout>
 
-        <ImageView
-            android:id="@+id/imageView3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_below="@+id/relativeLayout2"
-            android:adjustViewBounds="true"
-            android:scaleType="fitXY"
-            app:srcCompat="@drawable/home_4" />
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/relativeLayout2"
+        android:adjustViewBounds="true"
+        android:contentDescription="@string/separate"
+        android:scaleType="fitXY"
+        app:srcCompat="@drawable/home_4" />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -101,7 +104,7 @@
                             android:layout_alignParentStart="true"
                             android:layout_alignParentTop="true"
                             android:layout_weight="1"
-                            android:text="產品名稱：" />
+                            android:text="@string/product_name" />
 
                         <TextView
                             android:id="@+id/txt_pdname"
@@ -125,7 +128,7 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentStart="true"
                             android:layout_marginBottom="5dp"
-                            android:text="產品編號：" />
+                            android:text="@string/product_number" />
 
                         <TextView
                             android:id="@+id/txt_pdcode"
@@ -152,7 +155,7 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentStart="true"
                             android:layout_marginBottom="5dp"
-                            android:text="GTIN：" />
+                            android:text="@string/gtin" />
 
                     </RelativeLayout>
 
@@ -164,9 +167,9 @@
                             android:id="@+id/textView16"
                             android:layout_width="80dp"
                             android:layout_height="wrap_content"
+                            android:layout_alignParentBottom="true"
                             android:layout_alignParentStart="true"
-                            android:layout_marginBottom="5dp"
-                            android:text="存量：" />
+                            android:text="@string/quantity" />
 
                         <TextView
                             android:id="@+id/txt_pdqty"
@@ -198,7 +201,7 @@
                             android:layout_alignParentStart="true"
 
                             android:layout_marginTop="10dp"
-                            android:text="批次号：" />
+                            android:text="@string/lot" />
                     </RelativeLayout>
 
                     <RelativeLayout
@@ -224,7 +227,7 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentStart="true"
                             android:layout_marginTop="10dp"
-                            android:text="到期日：" />
+                            android:text="@string/exp" />
                     </RelativeLayout>
 
                     <RelativeLayout
@@ -252,7 +255,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_centerVertical="true"
-                                android:text="贈送量：" />
+                                android:text="@string/gift_quantity" />
                         </RelativeLayout>
 
                         <TextView
@@ -262,7 +265,7 @@
                             android:layout_alignParentStart="true"
                             android:layout_alignParentTop="true"
                             android:layout_marginTop="10dp"
-                            android:text="補充量：" />
+                            android:text="@string/sup_qty" />
 
                         <EditText
                             android:id="@+id/txt_actqty"
@@ -308,7 +311,7 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentStart="true"
                             android:layout_marginTop="10dp"
-                            android:text="合共價格：" />
+                            android:text="@string/total_price" />
                     </RelativeLayout>
 
                     <RelativeLayout
@@ -333,7 +336,7 @@
                             android:layout_width="80dp"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
-                            android:text="INV：" />
+                            android:text="@string/inv" />
                     </RelativeLayout>
 
                     <RelativeLayout
@@ -392,5 +395,3 @@
         </RelativeLayout>
 
     </RelativeLayout>
-
-</RelativeLayout>

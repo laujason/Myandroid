@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -21,8 +20,6 @@ import com.ormedia.qrscanner.Network.JSONResponse;
 import com.ormedia.qrscanner.barcode.BarcodeCaptureActivity;
 import org.json.JSONArray;
 import org.json.JSONObject;
-
-import java.net.URLDecoder;
 import java.net.URLEncoder;
 
 
@@ -178,6 +175,7 @@ public class home extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 Log.d("result code",result_code[which]);
                 code = result_code[which];
+                oricode = code;
                 Log.d("filtered code",code);
                 downLoadFromServer(code);
             }
@@ -192,20 +190,8 @@ public class home extends AppCompatActivity {
     }
 
     @Override
-    protected void onStart(){
-        super.onStart();
-        /*
-        View view = this.getCurrentFocus();
-        if (view != null) {
-            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-        }
-        */
-
-    }
-    @Override
     public void onBackPressed() {
-        //Toast.makeText(getApplicationContext(), "cannot go back", Toast.LENGTH_SHORT).show();
+
     }
 
 
@@ -221,7 +207,7 @@ public class home extends AppCompatActivity {
                     String productName = json.getString("productName");
                     String supplier = json.getString("supplierName");
                     String quantity = json.getString("quantity");
-                    String productID = json.getString("postid");
+                    StringBuilder productID = new StringBuilder(json.getString("postid"));
                     String lot = json.getString("lot");
                     String exp = json.getString("exp");
 
@@ -241,7 +227,7 @@ public class home extends AppCompatActivity {
                         }
                     }
                     if (!json.getString("search").equals("")) {
-                        if (json.getString("search").equals("no result")) {
+                        if (json.getString("search").equals("no result") && !(method.equals("new")||method.equals("cancel"))) {
                             Toast.makeText(getApplicationContext(),"沒有搜尋結果",Toast.LENGTH_LONG).show();
                         } else {
                             JSONArray data = json.getJSONArray("search");
@@ -262,13 +248,13 @@ public class home extends AppCompatActivity {
                         }
                     }
 
-                    if (!productName.equals("".toString())) {
+                    if (!productName.equals("")) {
                         while ((productID.length()<5)){
-                            productID="0"+productID;
+                            productID.insert(0, "0");
                         }
                         productName = supplier + "\n" + productName;
                         txt_pdname.setText(productName);
-                        txt_pdcode.setText(productID);
+                        txt_pdcode.setText(productID.toString());
                         txt_pdgtin.setText(GTIN.replace("\u001d",""));
                         Log.d("gtin text", txt_pdgtin.getText().toString());
                         txt_pdqty.setText(quantity);
@@ -276,7 +262,7 @@ public class home extends AppCompatActivity {
                         txt_exp.setText(exp);
                         code = GTIN;
                     } else {
-                        if (!(method.equals("new".toString()) || method.equals("cancel".toString()) )) {
+                        if (!(method.equals("new") || method.equals("cancel") )) {
                             Toast.makeText(getApplicationContext(), "物品不存在", Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -296,14 +282,11 @@ public class home extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        String GTIN = "";
-        String checkString="";
-        //String longCode;
+        String GTIN;
         if (requestCode == BARCODE_READER_REQUEST_CODE) {
             if (resultCode == CommonStatusCodes.SUCCESS) {
                 if (data != null) {
                     Barcode barcode = data.getParcelableExtra(BarcodeCaptureActivity.BarcodeObject);
-                    Point[] p = barcode.cornerPoints;
                     GTIN = barcode.displayValue;
                     oricode = GTIN;
                     downLoadFromServer(GTIN);
@@ -313,42 +296,23 @@ public class home extends AppCompatActivity {
         } else super.onActivityResult(requestCode, resultCode, data);
     }
 
-    public static String decode(String url) {
-        try {
-            String prevURL = "";
-            String decodeURL = url;
-            while(!prevURL.equals(decodeURL)) {
-                prevURL = decodeURL;
-                decodeURL = URLDecoder.decode( decodeURL, "UTF-8" );
-            }
-            return decodeURL;
-        } catch (Exception e) {
-            return "Error: " + e.getMessage();
-        }
-    }
-
     public static String encode(String url) {
         try {
-            String encodeURL = URLEncoder.encode( url, "UTF-8" );
-            return encodeURL;
+            return URLEncoder.encode( url, "UTF-8" );
         } catch (Exception e) {
             return "Error: " + e.getMessage();
         }
     }
 
     private  Boolean productex() {
-        if (txt_pdname.getText().toString()!=""){
-            return true;
-        } else {
-            return false;
-        }
+        return !txt_pdname.getText().toString().equals("");
     }
 
     private void goinv (String method){
         Intent intent = new Intent(getApplicationContext(), inventory.class);
         home.method = method;
 
-        if (oricode ==""){
+        if (oricode.equals("")){
             oricode = code;
         }
         getExp();
