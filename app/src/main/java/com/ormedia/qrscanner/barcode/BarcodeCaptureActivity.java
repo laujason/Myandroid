@@ -10,6 +10,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.hardware.Camera;
 import android.os.Build;
 import android.os.Bundle;
@@ -18,6 +21,8 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.MotionEvent;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -31,6 +36,8 @@ import com.ormedia.qrscanner.camera.CameraSource;
 import com.ormedia.qrscanner.camera.CameraSourcePreview;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public final class BarcodeCaptureActivity extends AppCompatActivity
         implements BarcodeTracker.BarcodeGraphicTrackerCallback {
@@ -46,8 +53,8 @@ public final class BarcodeCaptureActivity extends AppCompatActivity
     // Constants used to pass extra data in the intent
     public static final String BarcodeObject = "Barcode";
 
-    private CameraSource mCameraSource;
-    private CameraSourcePreview mPreview;
+    public static CameraSource mCameraSource;
+    public static CameraSourcePreview mPreview;
 
     /**
      * Initializes the UI and creates the detector pipeline.
@@ -70,6 +77,72 @@ public final class BarcodeCaptureActivity extends AppCompatActivity
         } else {
             requestCameraPermission();
         }
+    }
+
+    private static Rect calculateTapArea(float x, float y, float coefficient, int width, int height) {
+        float focusAreaSize = 300;
+        int areaSize = Float.valueOf(focusAreaSize * coefficient).intValue();
+        int centerX = (int) (x / width * 2000 - 1000);
+        int centerY = (int) (y / height * 2000 - 1000);
+
+        int halfAreaSize = areaSize / 2;
+        RectF rectF = new RectF(clamp(centerX - halfAreaSize, -1000, 1000)
+                , clamp(centerY - halfAreaSize, -1000, 1000)
+                , clamp(centerX + halfAreaSize, -1000, 1000)
+                , clamp(centerY + halfAreaSize, -1000, 1000));
+        return new Rect(Math.round(rectF.left), Math.round(rectF.top), Math.round(rectF.right), Math.round(rectF.bottom));
+    }
+
+    private static int clamp(int x, int min, int max) {
+        if (x > max) {
+            return max;
+        }
+        if (x < min) {
+            return min;
+        }
+        return x;
+    }
+
+    private static void handleFocus(MotionEvent event, Camera camera) {
+        int viewWidth = mPreview.getWidth();
+        int viewHeight = mPreview.getHeight();
+        Rect focusRect = calculateTapArea(event.getX(), event.getY(), 1f, viewWidth, viewHeight);
+
+        camera.cancelAutoFocus();
+        Camera.Parameters params = camera.getParameters();
+        if (params.getMaxNumFocusAreas() > 0) {
+            List<Camera.Area> focusAreas = new ArrayList<>();
+            focusAreas.add(new Camera.Area(focusRect, 800));
+            params.setFocusAreas(focusAreas);
+        } else {
+            Log.i(TAG, "focus areas not supported");
+        }
+        final String currentFocusMode = params.getFocusMode();
+        params.setFocusMode(Camera.Parameters.FOCUS_MODE_MACRO);
+        camera.setParameters(params);
+
+        camera.autoFocus(new Camera.AutoFocusCallback() {
+            @Override
+            public void onAutoFocus(boolean success, Camera camera) {
+                Camera.Parameters params = camera.getParameters();
+                params.setFocusMode(currentFocusMode);
+                camera.setParameters(params);
+            }
+        });
+    }
+
+
+
+    public boolean onTouchEvent(MotionEvent event) {
+        if (event.getPointerCount() == 1) {
+            int x = (int)event.getX();
+            int y = (int)event.getY();
+            Log.d("x, y", String.valueOf(x) + " " + String.valueOf(y) );
+            DrawCaptureRect mDraw = new DrawCaptureRect(BarcodeCaptureActivity.this, x,y,100,100, Color.RED);
+            addContentView(mDraw, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT));
+            handleFocus(event, mCameraSource.mCamera);
+        }
+        return true;
     }
 
     @Override
@@ -257,6 +330,7 @@ public final class BarcodeCaptureActivity extends AppCompatActivity
         if (mCameraSource != null) {
             try {
                 mPreview.start(mCameraSource);
+
             } catch (IOException e) {
                 Log.e(TAG, "Unable to start camera source.", e);
                 mCameraSource.release();

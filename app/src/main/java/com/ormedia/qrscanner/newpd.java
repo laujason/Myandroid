@@ -278,7 +278,7 @@ public class newpd extends AppCompatActivity {
                     }
                     txt_supplier.setText(supplier);
                     txt_pdname.setText(productName);
-                    txt_pdgtin.setText(GTIN);
+                    txt_pdgtin.setText(GTIN.replace("\\u001d",""));
                     txt_lot.setText(lot);
                     txt_exp.setText(exp);
                     code = GTIN;
@@ -359,7 +359,7 @@ public class newpd extends AppCompatActivity {
         String supplierid = txt_suppid.getText().toString();
         String supplier = txt_supplier.getText().toString();
         String pdname = encode(txt_pdname.getText().toString());
-        oricode = txt_pdgtin.getText().toString();
+        oricode = txt_pdgtin.getText().toString().replace("\\u001d","");
         String remark = encode(txt_remark.getText().toString());
 
         String url = "http://35.198.210.107/move_inv?method=" + method +

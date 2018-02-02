@@ -98,6 +98,7 @@ public class home extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 code = txt_code.getText().toString();
+                oricode = code;
                 Log.d("ORM",code);
                 if (code.equals("adm")){
                     Intent intent = new Intent(getApplicationContext(), FullscreenActivity.class);
@@ -210,6 +211,7 @@ public class home extends AppCompatActivity {
                     StringBuilder productID = new StringBuilder(json.getString("postid"));
                     String lot = json.getString("lot");
                     String exp = json.getString("exp");
+
 
                     if (lot.equals("")){
                         lot = rlot;
