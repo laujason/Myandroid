@@ -25,7 +25,7 @@ public class login extends AppCompatActivity {
     private TextView txt_phone;
     private TextView txt_psw;
     private TextView txt_error;
-    private boolean debug = false;
+    private boolean debug = true;
     private CheckBox cb_read;
 
 

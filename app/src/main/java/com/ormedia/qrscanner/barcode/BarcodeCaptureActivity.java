@@ -16,13 +16,17 @@ import android.graphics.RectF;
 import android.hardware.Camera;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -55,6 +59,8 @@ public final class BarcodeCaptureActivity extends AppCompatActivity
 
     public static CameraSource mCameraSource;
     public static CameraSourcePreview mPreview;
+
+    private int count = 10;
 
     /**
      * Initializes the UI and creates the detector pipeline.
@@ -134,15 +140,39 @@ public final class BarcodeCaptureActivity extends AppCompatActivity
 
 
     public boolean onTouchEvent(MotionEvent event) {
+
         if (event.getPointerCount() == 1) {
-            int x = (int)event.getX();
-            int y = (int)event.getY();
+            int x = (int)event.getX() - 100;
+            int y = (int)event.getY() - 150;
+            int width = getwidth();
             Log.d("x, y", String.valueOf(x) + " " + String.valueOf(y) );
-            DrawCaptureRect mDraw = new DrawCaptureRect(BarcodeCaptureActivity.this, x,y,100,100, Color.RED);
-            addContentView(mDraw, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT));
             handleFocus(event, mCameraSource.mCamera);
+            final DrawCaptureRect mDraw = new DrawCaptureRect(BarcodeCaptureActivity.this, x,y, width, width,Color.RED);
+            count -= 10;
+            addContentView(mDraw, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT));
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable(){
+
+                @Override
+                public void run() {
+
+                    //過兩秒後要做的事情
+                    mDraw.setVisibility(View.INVISIBLE);
+                    count+=10;
+                }}, 1000);
+
         }
+
         return true;
+    }
+
+    public int getwidth(){
+        if (count>9){
+            return 200;
+        } else {
+            return 0;
+        }
+
     }
 
     @Override
